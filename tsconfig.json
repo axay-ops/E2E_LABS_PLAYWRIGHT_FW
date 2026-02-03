@@ -1,0 +1,61 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+           // File Layout
+           // "rootDir": "./src",
+           // "outDir": "./dist",
+
+    // Environment Settings
+           // See also https://aka.ms/tsconfig/module
+
+    "module": "ESNext", //nodenext",  
+    "target": "esnext",
+    "types": ["@playwright/test", "node"],  // IMPORTANT, added
+              // For nodejs:
+              // "lib": ["esnext"],
+              // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": false,  // changed it to false.
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",   //  IMPORTANT, added.
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+  }, 
+
+
+  /* 
+    * "include" setting specifies exactly which files and directories should be part of your TypeScript project's scope for type checking and IntelliSense
+    *  playwright.config.ts: This explicitly includes your main Playwright configuration file in the project's type-checking context. 
+              Including this file is crucial because it allows VS Code to provide autocompletion and error reporting for your global test settings
+  */
+  
+ // "include": ["tests/**/*.ts", "playwright.config.ts"]  // IMPORTANT, added.
+
+
+}

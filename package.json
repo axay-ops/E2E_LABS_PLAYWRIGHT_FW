@@ -1,0 +1,39 @@
+{
+  "name": "e2e_labs_playwright_fw",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+
+    "test:dev": "npx cross-env ENV=dev npx playwright test",
+    "test:qa": "npx cross-env ENV=qa npx playwright test",
+    "test:stage": "npx cross-env ENV=stage npx playwright test",
+
+    "test:qa:login": "npx dotenvx run --env ENV=qa -- npx playwright test ./loginpage.spec.ts",
+
+    "test:qa:smoke": "npx cross-env ENV=qa npx playwright test --grep '@smoke'",
+    "test:qa:regression": "npx cross-env ENV=qa npx playwright test --grep '@regression'",
+    "test:qa:registration":"npx cross-env ENV=qa npx playwright test --grep '@registration'",
+
+    "test:qa:allure": "npx cross-env ENV=qa npx playwright test ./loginpage.spec.ts && npx allure generate allure-results --clean -o allure-report && npx allure open allure-report",
+
+    "allure:generate": "npx allure generate allure-results --clean -o allure-report",
+    "allure:open": "npx allure open allure-report"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^1.52.0",
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^25.0.10",
+    "allure-commandline": "^2.36.0",
+    "allure-playwright": "^3.4.5",
+    "cross-env": "^10.1.0",
+    "playwright-html-reporter": "^0.1.11"
+  },
+  "dependencies": {
+    "csv-parse": "^6.1.0"
+  }
+}
