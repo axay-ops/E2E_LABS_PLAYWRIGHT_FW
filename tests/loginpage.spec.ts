@@ -10,7 +10,7 @@ test('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '
         expect(await AdminhomePage.getTitle()).toEqual("My Account");
 })
 
-test('Verify Successful login for Customer User', {tag: ['@smoke', '@regression']}, async ({CustomerhomePage})=> {
+test('Verify Successful login for Customer User', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
 
         expect(await CustomerhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await CustomerhomePage.getTitle()).toEqual("My Account");
