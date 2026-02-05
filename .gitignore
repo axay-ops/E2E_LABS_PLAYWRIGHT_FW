@@ -9,5 +9,5 @@ node_modules/
 /playwright/.auth/
 /allure-report/
 /allure-results/
-.env*
+
 .env.keys

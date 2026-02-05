@@ -31,7 +31,9 @@ jobs:
 
       # 5️⃣ Run Playwright Tests (HTML report will be generated in playwright-report)
       - name: Run Playwright Tests
-        run: npx dotenvx run --env ENV=qa -- npx playwright test tests/loginpage.spec.ts
+        run: npx dotenvx run -- npx playwright test tests/loginpage.spec.ts
+        env:
+          DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
 
       # 6️⃣ Generate Allure HTML Report
       - name: Generate Allure Report
