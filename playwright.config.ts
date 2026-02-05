@@ -15,7 +15,7 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
  
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : undefined,
 
   forbidOnly: !!process.env.CI,   //* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -33,7 +33,7 @@ export default defineConfig({
       embedAttachments: true,
       outputFolder: 'playwright-html-report',
       minifyAssets: true,
-      startServer: true
+      startServer: process.env.CI ? false : true
     }], 
     ['allure-playwright', {
       environmentInfo: {
