@@ -52,7 +52,9 @@ export default defineConfig({
         fullPage: true},
     video: 'on',
     baseURL: process.env.BASE_URL,
-    headless: process.env.HEADLESS === 'true',
+    headless: process.env.CI ? true : (process.env.HEADLESS === 'true'),
+    //headless: process.env.HEADLESS === 'true',
+    //headless: !!process.env.CI,  // false locally, true in CI
     },
 
   metadata: {
