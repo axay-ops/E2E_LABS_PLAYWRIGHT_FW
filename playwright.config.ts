@@ -69,9 +69,7 @@ export default defineConfig({
           Firefox and webkit - browesername  */
   
   projects: [
-    { name: 'setup', 
-      testMatch: /.*\.setup\.ts/ 
-    },
+    // { name: 'setup', testMatch: /.*\.setup\.ts/  },
     {
       name: 'Google Chrome',
       use: {channel: 'chrome',
@@ -81,7 +79,7 @@ export default defineConfig({
                 ignoreDefaultArgs: ['--window-size=1280, 720']
               },
            },
-      dependencies: ['setup']     
+      // dependencies: ['setup']     
     },
     
     // {

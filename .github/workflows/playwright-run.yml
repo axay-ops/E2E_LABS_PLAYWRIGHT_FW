@@ -27,7 +27,7 @@ jobs:
 
       # 4️⃣ Install Playwright Browsers (all configured browsers)
       - name: Install Playwright Browsers
-        run: npx playwright install chrome --with-deps
+        run: npx playwright install chromium msedge chrome --with-deps
         # run: npx playwright install chromium chrome msedge firefox webkit --with-deps
 
       # 5️⃣ Run Playwright Tests (HTML report will be generated in playwright-report)

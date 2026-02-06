@@ -3,11 +3,8 @@ import { STORAGE_STATE_PATH } from '../playwright.config';
 import { LoginPage } from '../pages/LoginPage';
 
 
- //const adminjsonFile = STORAGE_STATE_PATH('admin');
- //const customerjsonFile = STORAGE_STATE_PATH('customer');
-
-// const customerFile = 'playwright/.auth/qa-admin.json'; 
-// const customerFile = 'playwright/.auth/qa-customer.json'; 
+ // const adminjsonFile = STORAGE_STATE_PATH('admin');
+ // const customerjsonFile = STORAGE_STATE_PATH('customer');
 
 setup ("Authenticate as Admin User", async ({page, baseURL})=> {
     const mypage = new LoginPage (page); 
