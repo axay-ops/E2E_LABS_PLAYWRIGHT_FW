@@ -32,7 +32,7 @@ test('Verify Invalid Login',
     async ({page, baseURL})=> {
         let loginpage =  new LoginPage (page);
         await loginpage.navigateLoginPage(baseURL);
-        let homepage: HomePage = await loginpage.doLogin('pwtest@nal.com', 'test125453');
+        let homepage: HomePage = await loginpage.doLogin('abcest2@nal.com', 'test125453');
         expect(await homepage.getTitle()).toEqual("Account Login");
 
         const errormsg = await loginpage.getWarningMsgforInvalidLogin();
