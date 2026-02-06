@@ -15,11 +15,7 @@ const searchData = [
 
 for (let product of searchData) {
 test(`Verify Product Header and Images for Product ${product.productName}`, {tag: ['@smoke', '@UI']}, async ({AdminhomePage})=> {
-       
-        // let loginpage =  new LoginPage (page);
-        // await loginpage.gotoLoginPage();
-        // let homepage: HomePage = await loginpage.doLogin('pwtest@nal.com', 'test123');
-       
+           
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual("My Account");
 
@@ -53,9 +49,6 @@ const ProductData = [
 
 for (let product of ProductData) {
 test(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@UI']}, async ({AdminhomePage})=> {
-        //let loginpage =  new LoginPage (page);
-        //await loginpage.gotoLoginPage();
-        //let homepage: HomePage = await loginpage.doLogin('pwtest@nal.com', 'test123');
        
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual("My Account");

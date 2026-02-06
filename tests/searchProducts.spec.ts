@@ -16,15 +16,10 @@ let searchData = [
 
 for (let product of searchData) {
 test(`Verify Search Product: ${product.key}`, {tag: ['@smoke', '@regression', '@UI', '@product']}, async ({AdminhomePage})=> {
-        //let loginpage =  new LoginPage (page);
-        //await loginpage.gotoLoginPage();
-        //let homepage: HomePage = await loginpage.doLogin('pwtest@nal.com', 'test123');
-       
-        //expect(await homepage.isUserLoggedIn()).toBeTruthy();
-        //expect(await homepage.getTitle()).toEqual("My Account");
-
         let resultspage: ResultsPage = await AdminhomePage.doSearch(product.key); 
         expect(await resultspage.getProductsCount()).toBe(product.results);
 })       
 }
+
+
 

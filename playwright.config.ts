@@ -1,23 +1,24 @@
 import { defineConfig, devices } from '@playwright/test';
-
-//Read environment variables from file. * https://github.com/motdotla/dotenv
-
-//import dotenv from 'dotenv';
 import dotenvx from '@dotenvx/dotenvx'
 import path from 'path';
 
-const ENV = process.env.ENV || 'qa';
-// dotenv.config({ path: path.resolve(import.meta.dirname, `.env.${ENV}`) });   // dotenv.config({ path: path.resolve("", '.env') });
-dotenvx.config({ path: path.resolve("", `.env.${ENV}`) }); 
+// Load from .env files based on ENV
+  const ENV = process.env.ENV || 'qa';
+  dotenvx.config({ path: path.resolve("", `.env.${ENV}`) }); 
+
+// set path for Storage stage json files based on env. 
+  export const STORAGE_STATE_PATH = (role: string) => {
+       return path.join("", `playwright/.auth/${ENV}-${role}.json`);
+      }
 
 export default defineConfig({
   // globalSetup: "";
+  
   testDir: './tests',
   fullyParallel: true,
  
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : undefined,
-
   forbidOnly: !!process.env.CI,   //* Fail the build on CI if you accidentally left test.only in the source code. */
 
   reporter: [
@@ -51,24 +52,26 @@ export default defineConfig({
         mode: 'on',
         fullPage: true},
     video: 'on',
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.BASE_URL!,
     headless: process.env.CI ? true : (process.env.HEADLESS === 'true'),
-    //headless: process.env.HEADLESS === 'true',
     //headless: !!process.env.CI,  // false locally, true in CI
     },
 
   metadata: {
-    appAdminUsername:  process.env.ADMIN_USER,  // "pwtest@nal.comxx",  //  this metadata will be accessible in test/fixtures via testInfo.project.metadata.appUsername */ 
-    appAdminPassword:  process.env.ADMIN_PASSWORD, // test123xx
-    appCustomerUsername: process.env.CUSTOMER_USER, // akk@opencart.comxx
-    appCustomerPassword: process.env.CUSTOMER_PASSWORD, // akk@123xx
-  },
+    appAdminUsername:  process.env.ADMIN_USER,    //  this metadata will be accessible in test/fixtures/auth via testInfo.project.metadata.appUsername */ 
+    appAdminPassword:  process.env.ADMIN_PASSWORD,
+    appCustomerUsername: process.env.CUSTOMER_USER, 
+    appCustomerPassword: process.env.CUSTOMER_PASSWORD, 
+    },
 
   /* Configure projects for major browsers
-  chrome and msedge, chromium - channel and launchoptions works
-  Firefox and webkit - browesername  */
+          chrome and msedge, chromium - channel and launchoptions works
+          Firefox and webkit - browesername  */
   
   projects: [
+    { name: 'setup', 
+      testMatch: /.*\.setup\.ts/ 
+    },
     {
       name: 'Google Chrome',
       use: {channel: 'chrome',
@@ -77,7 +80,8 @@ export default defineConfig({
                 args: ['--start-maximized'],
                 ignoreDefaultArgs: ['--window-size=1280, 720']
               },
-           }
+           },
+      dependencies: ['setup']     
     },
     
     // {
@@ -88,7 +92,8 @@ export default defineConfig({
     //             args: ['--start-maximized'],
     //             ignoreDefaultArgs: ['--window-size=1280, 720']
     //           }
-    //    }
+    //    },
+    //    dependencies: ['setup'] 
     // },
 
     // {
@@ -99,7 +104,8 @@ export default defineConfig({
     //             args: [],
     //             ignoreDefaultArgs: ['--window-size=1280, 720']
     //           }
-    //    }
+    //    },
+    //   dependencies: ['setup'] 
     // },
 
     // {
@@ -111,6 +117,7 @@ export default defineConfig({
     //           ignoreDefaultArgs: ['--window-size=1280, 720']
     //         }
     //   },
+    //   dependencies: ['setup'] 
     // },
 
 

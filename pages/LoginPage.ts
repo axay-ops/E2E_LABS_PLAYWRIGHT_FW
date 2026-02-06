@@ -36,11 +36,13 @@ export class LoginPage {
     async navigateLoginPage(baseURL: string | undefined) {
         await this.page.goto(baseURL+"?route=account/login"); 
     }
+
+
     /**
      * Login using Username and password
      * @param email 
      * @param password 
-     * @returns page title
+     * @returns Home Page object
      */
     async doLogin(email:string, password: string): Promise<HomePage> {
         await this.eleUtil.fill(this.emailId, email);
@@ -66,4 +68,9 @@ export class LoginPage {
         await this.eleUtil.click(this.registerLink);
         return new RegistrationPage (this.page);
     }
+
+    async getTitle(): Promise<string> {
+        return await this.page.title();
+    }
+
 }
