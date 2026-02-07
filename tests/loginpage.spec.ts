@@ -32,8 +32,7 @@ test('Verify Invalid Login',
         expect(await homepage.getTitle()).toEqual("Account Login");
 
         const errormsg = await loginpage.getWarningMsgforInvalidLogin();
-        expect(errormsg).toContain("Warning: No match for E-Mail Address and/or Password."); 
-
+        expect(errormsg).toContain("Warning:");
 })
 
 

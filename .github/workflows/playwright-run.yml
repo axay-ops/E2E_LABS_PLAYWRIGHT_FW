@@ -186,3 +186,10 @@ jobs:
 # on:
 #   repository_dispatch:
 #     types: [run-e2e-tests]
+
+# - name: Trigger E2E in Test Repo
+#   uses: peter-evans/repository-dispatch@v3
+#   with:
+#     token: ${{ secrets.CROSS_REPO_PAT }}
+#     repository: my-org/my-test-repo
+#     event-type: run-e2e-tests
