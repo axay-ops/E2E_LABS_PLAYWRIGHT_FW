@@ -32,7 +32,7 @@ jobs:
 
       # 5️⃣ Run Playwright Tests
       - name: Run Playwright Tests
-        run: npx dotenvx run -- npx playwright test tests/loginpage.spec.ts
+        run: ENV=qa npx playwright test tests/loginpage.spec.ts
         env:
           DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
 
@@ -179,3 +179,10 @@ jobs:
 #         env:
 #           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
 #         run: npx playwright test
+
+# **************************************************************************
+
+# SET TRIGGER based on another repository. 
+# on:
+#   repository_dispatch:
+#     types: [run-e2e-tests]
