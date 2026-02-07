@@ -19,18 +19,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: lts/*
 
-      # 3️⃣ Install dependencies (ci= continous integration)
+      # 3️⃣ Install dependencies (ci= clean install, it doesnt modify package files. Faster than npm install)
       - name: Install dependencies
         run: npm ci
 
       # 4️⃣ Install Playwright Browsers (all configured browsers)
       - name: Install Playwright Browsers
-        run: npx playwright install chromium msedge chrome --with-deps
-        # run: npx playwright install chromium chrome msedge firefox webkit --with-deps
+        run: npx playwright install chromium --with-deps
+        # run: npx playwright install --with-deps  // all browser binaries
 
-      # 5️⃣ Run Playwright Tests (HTML report will be generated in playwright-report)
+      # 5️⃣ Run Playwright Tests
       - name: Run Playwright Tests
         run: npx dotenvx run -- npx playwright test tests/loginpage.spec.ts
         env:
@@ -152,3 +152,30 @@ jobs:
           echo "Playwright Built-in: https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-report/index.html"
           echo "Playwright HTML Reporter: https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-html-report/index.html"
           echo "Allure: https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/allure-report/index.html"
+
+
+
+
+# For multiple environments
+# --------------------------
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       target_env:
+#         description: 'Environment to run tests against'
+#         required: true
+#         default: 'staging'
+#         type: choice
+#         options:
+#           - staging
+#           - production
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     environment: ${{ inputs.target_env }}
+#     steps:
+#       - name: Execute
+#         env:
+#           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+#         run: npx playwright test
