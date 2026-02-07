@@ -1,0 +1,4 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","2918","Verify Invalid Login","Google Chrome","2026-02-07","passed","2026-02-07","","loginpage.spec.ts","",""
+"","5234","Verify Successful login for Admin User","Google Chrome","2026-02-07","passed","2026-02-07","","loginpage.spec.ts","",""
+"","3357","Verify Successful login for Customer User","Google Chrome","2026-02-07","passed","2026-02-07","","loginpage.spec.ts","",""
