@@ -1,0 +1,8 @@
+{
+  "currencyOptions": ["Euro", "Pound Sterling", "US Dollar"],
+  "inventoryCategories": ["Electronics", "Books", "Software"],
+  "homePageTitle": "My Account",
+  "loginPageTitle": "Account Login"
+}
+
+

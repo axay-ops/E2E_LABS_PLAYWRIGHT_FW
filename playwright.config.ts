@@ -22,7 +22,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,   //* Fail the build on CI if you accidentally left test.only in the source code. */
 
   reporter: [
-    //['html'],
+    ['html'],
     ['list'],
     ['playwright-html-reporter', {
       testFolder: 'tests',

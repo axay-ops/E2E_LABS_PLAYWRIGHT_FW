@@ -14,7 +14,7 @@ type registrationUserData = {
     SubscribeNewsletter: string
 }
 
-let csvfilecontent = fs.readFileSync('./data/registrationdata.csv', 'utf-8');
+let csvfilecontent = fs.readFileSync('./data/bulk-registrationdata.csv', 'utf-8');
 let userdata: registrationUserData[]  = parse(csvfilecontent, {
     columns: true,
     skip_empty_lines: true 

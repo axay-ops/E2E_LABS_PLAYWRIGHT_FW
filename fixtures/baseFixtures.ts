@@ -76,9 +76,9 @@ export const test1 = base.extend<customFixtures1>({
                  recordVideo: {dir: testInfo.outputPath('videos')}});
         
         // display current active cookies to check values        
-        const cookies = await context.cookies();
-        console.log('Active Cookies:', cookies.map(c => c.name));
-
+            const cookies = await context.cookies();
+            console.log('Active Cookies:', cookies.map(c => c.name));
+                    
         const mypage = await context.newPage();
         await mypage.goto(baseURL+"?route=account/account"); 
         const homepage = new HomePage (mypage);
