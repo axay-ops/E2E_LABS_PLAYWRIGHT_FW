@@ -31,25 +31,8 @@ test(`Verify Product Header and Images for Product ${product.productName}`, {tag
 })
 }
 
-
-const ProductData = [
-    {searchKey: 'macbook', productName: 'MacBook', ResultCount: 3, productImageCount: 5, 
-        "Brand": "Apple", "ProductCode": "Product 16", "RewardPoints": "600", "Availability":"In Stock",
-        "Price":"$602.00", "ExTax": "$500.00"  
-    },
-    {searchKey: 'MacBook Air', productName: 'MacBook Air', ResultCount: 1, productImageCount: 4, 
-        "Brand": "Apple", "ProductCode": "Product 17", "RewardPoints": "700", "Availability":"Out Of Stock",
-        "Price":"$1,202.00", "ExTax": "$1,000.00"
-    },
-    {searchKey: 'samsung', productName: 'Samsung Galaxy Tab 10.1', ResultCount: 2,  productImageCount: 7,
-         "Brand": "Samsung", "ProductCode": "SAM1", "RewardPoints": "1000", "Availability":"Pre-Order", 
-        "Price":"$241.99", "ExTax": "$199.99"
-    }
-];
-
-
-for (let product of ProductData) {
-test.skip(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@UI']}, async ({AdminhomePage})=> {
+for (let product of testData.ProductData) {
+test(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@UI']}, async ({AdminhomePage})=> {
        
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual("My Account");
@@ -79,8 +62,6 @@ test.skip(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@
         }
 })
 }
-
-
 
 
 

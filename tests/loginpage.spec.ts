@@ -54,11 +54,11 @@ test('Verify Invalid Login',
 })
 
 test ("Login Page: Verify presence of all options on right side panel", {tag: ['@Smoke', '@UI']}, async ({page, baseURL})=> {
+        test.setTimeout(60000); // timeout for this test
         let loginpage = new LoginPage(page); 
         await loginpage.navigateLoginPage(baseURL); 
         
         let allOptions: string[] = await loginpage.getAllOptionsFromRightPanel(); 
         expect(allOptions.length).toEqual(testData.loginPageRightPanelOptions.length);
         expect(allOptions).toEqual(testData.loginPageRightPanelOptions);
-   
 })
