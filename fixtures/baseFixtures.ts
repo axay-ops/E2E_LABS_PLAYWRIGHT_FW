@@ -30,14 +30,14 @@ export const test = base.extend<customFixtures>({
      await context.close();
 
      // attach videos manually, since context is created manually (not by PW's page)
-     const videoPath = await mypage.video()?.path();
-     console.log(`Video saved in standard location: ${videoPath}`)
-      if (videoPath) {
-            await testInfo.attach('video', {
-            path: videoPath,
-            contentType: 'video/webm',
-        });
-    }
+    //  const videoPath = await mypage.video()?.path();
+    //  console.log(`Video saved in standard location: ${videoPath}`)
+    //   if (videoPath) {
+    //         await testInfo.attach('video', {
+    //         path: videoPath,
+    //         contentType: 'video/webm',
+    //     });
+    // }
     },
 
     CustomerhomePage:  async ({browser, baseURL}, use, testInfo) => {

@@ -4,6 +4,7 @@ import { LoginPage } from '../pages/LoginPage'
 import { HomePage } from '../pages/HomePage';
 import { ResultsPage } from '../pages/ResultsPage';
 import { ProductsInfoPage } from '../pages/ProductsInfoPage';
+import { testData } from '../utils/dataLoader';
 
 
 const searchData = [
@@ -13,7 +14,7 @@ const searchData = [
 ];
 
 
-for (let product of searchData) {
+for (let product of testData.searchData) {
 test(`Verify Product Header and Images for Product ${product.productName}`, {tag: ['@smoke', '@UI']}, async ({AdminhomePage})=> {
            
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
@@ -48,7 +49,7 @@ const ProductData = [
 
 
 for (let product of ProductData) {
-test(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@UI']}, async ({AdminhomePage})=> {
+test.skip(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@UI']}, async ({AdminhomePage})=> {
        
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual("My Account");

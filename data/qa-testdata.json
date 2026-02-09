@@ -1,10 +1,12 @@
 {
-  "currencyOptions": ["Euro", "Pound Sterling", "US Dollar"],
-  "inventoryCategories": ["Electronics", "Books", "Software"],
   "homePageTitle": "My Account",
   "loginPageTitle": "Account Login",
   "loginPageRightPanelOptions": ["Login", "Register", "Forgotten Password", "My Account", "Address Book", "Wish List", "Order History", "Downloads", "Recurring payments",
-                                  "Reward Points", "Returns", "Transactions","Newsletter"]
+                                  "Reward Points", "Returns", "Transactions","Newsletter"],
+  "searchData": [
+    {"searchKey": "macbook", "productName": "MacBook",  "productImageCount": 5},
+    {"searchKey": "MacBook Air", "productName": "MacBook Air", "productImageCount": 4},
+    {"searchKey": "samsung", "productName": "Samsung Galaxy Tab 10.1",  "productImageCount": 7}]                              
 }
 
 

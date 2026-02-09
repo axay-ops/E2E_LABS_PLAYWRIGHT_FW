@@ -32,6 +32,7 @@ export class LoginPage {
         this.warningMsg = page.locator("div.alert.alert-danger.alert-dismissible");
         this.registerLink = page.getByRole('link', { name: 'Register'}).nth(0);
         this.rightPanelOptions = page.locator("#column-right .list-group a.list-group-item");
+        //#cdk-overlay-0 nz-option-item
     }
 
     // 
