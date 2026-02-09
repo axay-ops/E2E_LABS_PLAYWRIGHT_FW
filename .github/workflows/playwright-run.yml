@@ -165,11 +165,11 @@ jobs:
 #       target_env:
 #         description: 'Environment to run tests against'
 #         required: true
-#         default: 'staging'
+#         default: 'qa'
 #         type: choice
 #         options:
 #           - staging
-#           - production
+#           - qa
 
 # jobs:
 #   test:

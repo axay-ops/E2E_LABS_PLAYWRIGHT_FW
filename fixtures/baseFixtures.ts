@@ -9,7 +9,7 @@ const customerjsonFile = STORAGE_STATE_PATH('customer');
 
 /* 
     OPTION 1`:
-    Below fixture doesnt use auth setup.
+    This fixture doesnt use "auth setup". 
     It returns the respective HomePage for Admin and Customer
 */
 
@@ -55,42 +55,45 @@ export const test = base.extend<customFixtures>({
 export {expect}; 
 
 
+/* 
+    OPTION 2:
+    **    This Base fixture uses "auth setup", i.e. storage stage Json files. 
+    **    It returns the respective Pages for Admin and Customer
+*/
 
 type customFixtures1 = {
     AdminhomePage: HomePage; 
-    CustomerhomePage: Page;
+    CustomerhomePage: HomePage;
 }
 
-/* 
-    OPTION 2:
-    Below Base fixture uses auth setup, i.e. storagestage Json files. 
-    It returns the respective Pages for Admin and Customer
 
-*/
+
 export const test1 = base.extend<customFixtures1>({
-    AdminhomePage: async ({browser}, use, testInfo) => {
-        
-        console.log (`path in base: ${STORAGE_STATE_PATH('admin')}`); 
+    AdminhomePage: async ({browser, baseURL}, use, testInfo) => {
 
         const context = await browser.newContext(
                 {storageState: STORAGE_STATE_PATH('admin')!,
                  recordVideo: {dir: testInfo.outputPath('videos')}});
+        
+        // display current active cookies to check values        
+        const cookies = await context.cookies();
+        console.log('Active Cookies:', cookies.map(c => c.name));
+
         const mypage = await context.newPage();
+        await mypage.goto(baseURL+"?route=account/account"); 
         const homepage = new HomePage (mypage);
         await use(homepage);
         await context.close();
         },
 
-       // `playwright/.auth/${ENV}-${role}.json`)
-
-
-
-    CustomerhomePage: async ({browser}, use, testInfo) => {
+    CustomerhomePage: async ({browser, baseURL}, use, testInfo) => {
         const context = await browser.newContext(
                 {storageState: STORAGE_STATE_PATH('customer')!,
                  recordVideo: {dir: testInfo.outputPath('videos')}});
         const mypage = await context.newPage();
-        await use(mypage);
+        await mypage.goto(baseURL+"?route=account/account"); 
+        const homepage = new HomePage (mypage);
+        await use(homepage);
         await context.close();
         }
     }

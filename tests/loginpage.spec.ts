@@ -1,14 +1,19 @@
-// import {test, expect} from '@playwright/test
-import { test, expect} from '../fixtures/baseFixtures'
+// import {test,  expect} from '@playwright/test
+import { test, test1, expect} from '../fixtures/baseFixtures'
 import { LoginPage } from '../pages/LoginPage'
 import { HomePage } from '../pages/HomePage';
+
+
 
 
 test('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> { 
         expect(await AdminhomePage.getTitle()).toEqual("My Account");
 })
 
-test('Verify Successful login for Customer User', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
+
+
+
+test('Verify Successful login for Customer User', {tag: ['@smoke', '@UI']}, async ({CustomerhomePage})=> {
         expect(await CustomerhomePage.getTitle()).toEqual("My Account");
 
 })
@@ -36,20 +41,19 @@ test('Verify Invalid Login',
 })
 
 
+ // From another Test1 (AUTH SETUP setup) base fixture
 
-/* From another Test1 base fixture
+test1 ('Verify Successful login for Admin User (auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> {
 
-test1 ('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> {
-
+        //expect(await AdminhomePage.title()).toEqual("My Account");
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual("My Account");
 })
 
-test1 ('Verify Successful login for Customer User', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
+
+test1 ('Verify Successful login for Customer User (auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
 
         expect(await CustomerhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await CustomerhomePage.getTitle()).toEqual("My Account");
 
 })
-
-*/

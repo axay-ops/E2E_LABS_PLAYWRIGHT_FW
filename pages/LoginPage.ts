@@ -1,11 +1,14 @@
 import { Page, Locator } from '@playwright/test'
-import {ElementUtil} from '../utils/ElementUtil'; 
+import { ElementUtil } from '../utils/ElementUtil'; 
 import { HomePage } from './HomePage';
-import {RegistrationPage} from '../pages/RegistrationPage'
+import { RegistrationPage } from '../pages/RegistrationPage'
+import { STORAGE_STATE_PATH } from '../playwright.config';
+
+import { Context } from 'node:vm';
 
 export class LoginPage {
 
-// 1) page locators 
+    // 1) page locators 
         /* (all are private. classic example of Encapsulation, where locators are private, and used in public methods) */
     private readonly page: Page;
     private readonly eleUtil;
@@ -17,7 +20,7 @@ export class LoginPage {
     private readonly registerLink: Locator;
 
 
-// 2) page class constructor
+    // 2) page class constructor
     constructor (page: Page) {
         this.page = page;
         this.eleUtil = new ElementUtil(page);
@@ -28,13 +31,13 @@ export class LoginPage {
         this.registerLink = page.getByRole('link', { name: 'Register'}).nth(0);
     }
 
-// 3) Page Methods/Actions
+    // 3) Page Methods/Actions
 
     /**
         * navigate to login page
     */
     async navigateLoginPage(baseURL: string | undefined) {
-        await this.page.goto(baseURL+"?route=account/login"); 
+        await this.page.goto(baseURL+"?route=account/account"); 
     }
 
 
@@ -48,9 +51,6 @@ export class LoginPage {
         await this.eleUtil.fill(this.emailId, email);
         await this.eleUtil.fill(this.password, password, false);
         await this.eleUtil.click(this.loginBtn); 
-        //const title = await this.page.title();
-        //console.log("Page Title :" +title);
-        //return title;
         return new HomePage(this.page);
     }
 
@@ -72,5 +72,11 @@ export class LoginPage {
     async getTitle(): Promise<string> {
         return await this.page.title();
     }
+
+    // Save Session Storage State in Json files
+    async saveSessionState(role: string) {
+        console.log("Json file path : "+ STORAGE_STATE_PATH(role));
+        await this.page.context().storageState({path: STORAGE_STATE_PATH(role)!});
+}
 
 }

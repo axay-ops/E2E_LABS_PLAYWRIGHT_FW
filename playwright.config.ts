@@ -22,7 +22,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,   //* Fail the build on CI if you accidentally left test.only in the source code. */
 
   reporter: [
-    ['html'],
+    //['html'],
     ['list'],
     ['playwright-html-reporter', {
       testFolder: 'tests',
@@ -69,7 +69,7 @@ export default defineConfig({
           Firefox and webkit - browesername  */
   
   projects: [
-    // { name: 'setup', testMatch: /.*\.setup\.ts/  },
+    { name: 'setup', testMatch: /.*\.setup\.ts/  },
     {
       name: 'Google Chrome',
       use: {channel: 'chrome',
@@ -79,7 +79,7 @@ export default defineConfig({
                 ignoreDefaultArgs: ['--window-size=1280, 720']
               },
            },
-      // dependencies: ['setup']     
+     dependencies: ['setup']     
     },
     
     // {
