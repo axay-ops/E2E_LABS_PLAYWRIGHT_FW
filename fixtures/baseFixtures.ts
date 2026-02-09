@@ -2,7 +2,7 @@ import {test as base, expect, Page} from '@playwright/test'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/LoginPage';
 import { STORAGE_STATE_PATH } from '../playwright.config';
-import { log } from 'node:console';
+
 
 const adminjsonFile = STORAGE_STATE_PATH('admin');
 const customerjsonFile = STORAGE_STATE_PATH('customer');

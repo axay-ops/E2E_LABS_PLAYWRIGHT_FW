@@ -16,6 +16,8 @@ export class LoginPage {
     private readonly password: Locator;
     private readonly loginBtn:  Locator;
     private readonly warningMsg: Locator;
+    
+    private readonly rightPanelOptions: Locator;
 
     private readonly registerLink: Locator;
 
@@ -29,8 +31,11 @@ export class LoginPage {
         this.loginBtn = page.locator("input[type='submit'][value='Login']");
         this.warningMsg = page.locator("div.alert.alert-danger.alert-dismissible");
         this.registerLink = page.getByRole('link', { name: 'Register'}).nth(0);
+        this.rightPanelOptions = page.locator("#column-right .list-group a.list-group-item");
     }
 
+    // 
+    
     // 3) Page Methods/Actions
 
     /**
@@ -77,6 +82,13 @@ export class LoginPage {
     async saveSessionState(role: string) {
         console.log("Json file path : "+ STORAGE_STATE_PATH(role));
         await this.page.context().storageState({path: STORAGE_STATE_PATH(role)!});
-}
+    }
+
+    async getAllOptionsFromRightPanel (): Promise<string[]> {
+        const allTexts: string[] = await this.rightPanelOptions.allInnerTexts();
+        return allTexts;
+    }
+
+
 
 }

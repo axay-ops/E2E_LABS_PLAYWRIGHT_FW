@@ -5,8 +5,6 @@ import { HomePage } from '../pages/HomePage';
 import { testData } from '../utils/dataLoader';
 
 
-
-
 test('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> { 
         expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);
 })
@@ -19,14 +17,14 @@ test('Verify Successful login for Customer User', {tag: ['@smoke', '@UI']}, asyn
 
 
  // From another Test1 (AUTH SETUP setup) base fixture
-test1 ('Verify Successful login for Admin User (auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> {
+test1 ('Verify Successful login for Admin User (via auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> {
 
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);
 })
 
 
-test1 ('Verify Successful login for Customer User (auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
+test1 ('Verify Successful login for Customer User (via auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
 
         expect(await CustomerhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await CustomerhomePage.getTitle()).toEqual(testData.homePageTitle);
@@ -55,4 +53,12 @@ test('Verify Invalid Login',
         expect(errormsg).toContain("Warning:");
 })
 
-
+test ("Login Page: Verify presence of all options on right side panel", {tag: ['@Smoke', '@UI']}, async ({page, baseURL})=> {
+        let loginpage = new LoginPage(page); 
+        await loginpage.navigateLoginPage(baseURL); 
+        
+        let allOptions: string[] = await loginpage.getAllOptionsFromRightPanel(); 
+        expect(allOptions.length).toEqual(testData.loginPageRightPanelOptions.length);
+        expect(allOptions).toEqual(testData.loginPageRightPanelOptions);
+   
+})
