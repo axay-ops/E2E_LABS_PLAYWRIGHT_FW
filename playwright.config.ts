@@ -12,10 +12,10 @@ export const STORAGE_STATE_PATH = (role: string) => {
 
 export default defineConfig({
   
-  globalTimeout: 5 * 60 * 1000,   // Entire run - 0s (No limit) 
-  timeout: 1 * 60 * 1000,         // Single Test run - 30s
+  globalTimeout: 5 * 60 * 1000,   // Entire run       - 0s (No limit) 
+  timeout: 1 * 60 * 1000,         // Single Test run  - 30s
 
-  expect: {timeout: 10000},       // Web Assertion timeout (5s)
+  expect: {timeout: 10000},       // WebAssertion     - 5s
   
   testDir: './tests',
   fullyParallel: true,
