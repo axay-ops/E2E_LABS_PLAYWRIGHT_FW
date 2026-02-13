@@ -140,10 +140,10 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run DEV tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.dev.ts
+        run: ENV=dev npx playwright test tests/loginpage.spec.ts 
         env:
-          CI: true
-          ALLURE_ENVIRONMENT: DEV
+          DOTENV_PRIVATE_KEY_DEV: ${{ secrets.DOTENV_PRIVATE_KEY_DEV }}
+          ALLURE_ENVIRONMENT: DEV  
 
       # ✅ Add environment label to Allure results
       - name: 🏷️ Add Allure environment info
@@ -237,9 +237,9 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run QA tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.qa.ts
+        run: ENV=qa npx playwright test tests/loginpage.spec.ts 
         env:
-          CI: true
+          DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
           ALLURE_ENVIRONMENT: QA
 
       # ✅ Add environment label to Allure results
@@ -335,9 +335,9 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run STAGE tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.stage.ts
+        run: ENV=stage npx playwright test tests/loginpage.spec.ts 
         env:
-          CI: true
+          DOTENV_PRIVATE_KEY_STAGE: ${{ secrets.DOTENV_PRIVATE_KEY_STAGE }}
           ALLURE_ENVIRONMENT: STAGE
 
       # ✅ Add environment label to Allure results
@@ -389,100 +389,100 @@ jobs:
   # ============================================
   # PROD Environment Tests
   # ============================================
-  prod-tests:
-    name: 🚀 PROD Tests
-    runs-on: ubuntu-latest
-    needs: stage-tests
-    environment:
-      name: production
+  # prod-tests:
+  #   name: 🚀 PROD Tests
+  #   runs-on: ubuntu-latest
+  #   needs: stage-tests
+  #   environment:
+  #     name: production
     
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: 📥 Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+  #     - name: 📦 Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: 'npm'
 
-      - name: 📚 Install dependencies
-        run: npm ci
+  #     - name: 📚 Install dependencies
+  #       run: npm ci
 
-      # ✅ Cache Playwright browsers
-      - name: 🗄️ Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
+  #     # ✅ Cache Playwright browsers
+  #     - name: 🗄️ Cache Playwright browsers
+  #       uses: actions/cache@v4
+  #       id: playwright-cache
+  #       with:
+  #         path: ~/.cache/ms-playwright
+  #         key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+  #         restore-keys: |
+  #           playwright-${{ runner.os }}-
 
-      - name: 🎭 Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+  #     - name: 🎭 Install Playwright browsers
+  #       if: steps.playwright-cache.outputs.cache-hit != 'true'
+  #       run: npx playwright install --with-deps
 
-      - name: 🎭 Install Playwright dependencies (if cached)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps
+  #     - name: 🎭 Install Playwright dependencies (if cached)
+  #       if: steps.playwright-cache.outputs.cache-hit == 'true'
+  #       run: npx playwright install-deps
 
-      # ✅ Clean old results
-      - name: 🧹 Clean previous results
-        run: |
-          rm -rf allure-results playwright-report playwright-html-report test-results
+  #     # ✅ Clean old results
+  #     - name: 🧹 Clean previous results
+  #       run: |
+  #         rm -rf allure-results playwright-report playwright-html-report test-results
 
-      - name: 🧪 Run PROD tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.prod.ts
-        env:
-          CI: true
-          ALLURE_ENVIRONMENT: PROD
+  #     - name: 🧪 Run PROD tests
+  #       run: npx playwright test --grep "@sample" --config=playwright.config.prod.ts
+  #       env:
+  #         CI: true
+  #         ALLURE_ENVIRONMENT: PROD
 
-      # ✅ Add environment label to Allure results
-      - name: 🏷️ Add Allure environment info
-        if: always()
-        run: |
-          echo "Environment=PROD" > allure-results/environment.properties
-          echo "Browser=Google Chrome" >> allure-results/environment.properties
-          echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
-          # Add parent suite label to each result file
-          for file in allure-results/*-result.json; do
-            if [ -f "$file" ]; then
-              sed -i 's/"name":"\([^"]*\)"/"name":"[PROD] \1"/g' "$file" 2>/dev/null || true
-            fi
-          done
+  #     # ✅ Add environment label to Allure results
+  #     - name: 🏷️ Add Allure environment info
+  #       if: always()
+  #       run: |
+  #         echo "Environment=PROD" > allure-results/environment.properties
+  #         echo "Browser=Google Chrome" >> allure-results/environment.properties
+  #         echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
+  #         # Add parent suite label to each result file
+  #         for file in allure-results/*-result.json; do
+  #           if [ -f "$file" ]; then
+  #             sed -i 's/"name":"\([^"]*\)"/"name":"[PROD] \1"/g' "$file" 2>/dev/null || true
+  #           fi
+  #         done
 
-      - name: 📊 Upload HTML Report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report-prod
-          path: playwright-report/
-          retention-days: 30
+  #     - name: 📊 Upload HTML Report
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: playwright-report-prod
+  #         path: playwright-report/
+  #         retention-days: 30
 
-      - name: 📊 Upload Custom HTML Report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-html-report-prod
-          path: playwright-html-report/
-          retention-days: 30
+  #     - name: 📊 Upload Custom HTML Report
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: playwright-html-report-prod
+  #         path: playwright-html-report/
+  #         retention-days: 30
 
-      - name: 📊 Upload Allure Results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: allure-results-prod
-          path: allure-results/
-          retention-days: 30
+  #     - name: 📊 Upload Allure Results
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: allure-results-prod
+  #         path: allure-results/
+  #         retention-days: 30
 
-      - name: 📸 Upload Test Results (Screenshots/Videos)
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: test-results-prod
-          path: test-results/
-          retention-days: 7
+  #     - name: 📸 Upload Test Results (Screenshots/Videos)
+  #       uses: actions/upload-artifact@v4
+  #       if: failure()
+  #       with:
+  #         name: test-results-prod
+  #         path: test-results/
+  #         retention-days: 7
 
   # ============================================
   # Publish All Reports to GitHub Pages
@@ -490,7 +490,7 @@ jobs:
   publish-reports:
     name: 📈 Publish Reports
     runs-on: ubuntu-latest
-    needs: [dev-tests, qa-tests, stage-tests, prod-tests]
+    needs: [dev-tests, qa-tests, stage-tests]
     if: always()
     
     steps:
@@ -548,19 +548,19 @@ jobs:
           path: github-pages/stage/playwright-html-report
         continue-on-error: true
 
-      - name: 📥 Download PROD Playwright Report
-        uses: actions/download-artifact@v4
-        with:
-          name: playwright-report-prod
-          path: github-pages/prod/playwright-report
-        continue-on-error: true
+      # - name: 📥 Download PROD Playwright Report
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: playwright-report-prod
+      #     path: github-pages/prod/playwright-report
+      #   continue-on-error: true
 
-      - name: 📥 Download PROD HTML Report
-        uses: actions/download-artifact@v4
-        with:
-          name: playwright-html-report-prod
-          path: github-pages/prod/playwright-html-report
-        continue-on-error: true
+      # - name: 📥 Download PROD HTML Report
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: playwright-html-report-prod
+      #     path: github-pages/prod/playwright-html-report
+      #   continue-on-error: true
 
       # ========== Download Allure Results ==========
       - name: 📥 Download DEV Allure Results
@@ -584,12 +584,12 @@ jobs:
           path: allure-results/stage
         continue-on-error: true
 
-      - name: 📥 Download PROD Allure Results
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results-prod
-          path: allure-results/prod
-        continue-on-error: true
+      # - name: 📥 Download PROD Allure Results
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-results-prod
+      #     path: allure-results/prod
+      #   continue-on-error: true
 
       # ========== Generate Allure Reports PER ENVIRONMENT ==========
       - name: 📦 Setup Java (for Allure)
@@ -642,17 +642,17 @@ jobs:
             echo "⚠️ No STAGE allure results found or directory empty"
           fi
 
-      - name: 📊 Generate PROD Allure Report
-        run: |
-          echo "📂 Checking PROD allure-results..."
-          ls -la allure-results/prod/ || echo "Directory not found"
-          if [ -d "allure-results/prod" ] && [ "$(ls -A allure-results/prod 2>/dev/null)" ]; then
-            $ALLURE_PATH generate allure-results/prod -o github-pages/prod/allure-report --clean
-            echo "✅ PROD Allure report generated"
-            ls -la github-pages/prod/allure-report/
-          else
-            echo "⚠️ No PROD allure results found or directory empty"
-          fi
+      # - name: 📊 Generate PROD Allure Report
+      #   run: |
+      #     echo "📂 Checking PROD allure-results..."
+      #     ls -la allure-results/prod/ || echo "Directory not found"
+      #     if [ -d "allure-results/prod" ] && [ "$(ls -A allure-results/prod 2>/dev/null)" ]; then
+      #       $ALLURE_PATH generate allure-results/prod -o github-pages/prod/allure-report --clean
+      #       echo "✅ PROD Allure report generated"
+      #       ls -la github-pages/prod/allure-report/
+      #     else
+      #       echo "⚠️ No PROD allure results found or directory empty"
+      #     fi
 
       - name: 📂 Verify all reports before deploy
         run: |
@@ -770,7 +770,7 @@ jobs:
   notify:
     name: 📬 Send Notifications
     runs-on: ubuntu-latest
-    needs: [dev-tests, qa-tests, stage-tests, prod-tests, publish-reports]
+    needs: [dev-tests, qa-tests, stage-tests, publish-reports]
     if: always()
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

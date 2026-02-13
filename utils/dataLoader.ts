@@ -3,7 +3,7 @@ import qaData from '../data/qa-testdata.json' with { type: 'json' };
 import stageData from '../data/stage-testdata.json' with { type: 'json' };
 
 const testenv = process.env.ENV || 'qa';
-let data: any;
+let data: any;  // eslint-disable-line @typescript-eslint/no-explicit-any
 
 switch (testenv) {
         case 'qa':
