@@ -68,14 +68,14 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             playwright-${{ runner.os }}-
-
+       
       - name: 🎭 Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps  ## Install browser binaries and os dependancies
 
       - name: 🎭 Install Playwright dependencies (if cached)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'  
+        run: npx playwright install-deps   ## Install only os dependancies
 
       # ✅ Clean old results
       - name: 🧹 Clean previous results

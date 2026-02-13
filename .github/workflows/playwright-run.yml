@@ -8,36 +8,37 @@ on:
 
 jobs:
   test:
+    name: 🧪 All Tests
     runs-on: ubuntu-latest
 
     steps:
       # 1️⃣ Checkout repo
-      - name: Checkout repo
+      - name: 📥 Checkout repo
         uses: actions/checkout@v4
 
       # 2️⃣ Setup Node.js
-      - name: Setup Node.js
+      - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
 
       # 3️⃣ Install dependencies (ci = clean install, it doesnt modify package files. Faster than npm install)
-      - name: Install dependencies
+      - name: 📚 Install dependencies
         run: npm ci
 
       # 4️⃣ Install Playwright Browsers (all configured browsers)
-      - name: Install Playwright Browsers
+      - name: 🎭 Install Playwright Browsers
         run: npx playwright install chromium --with-deps
         # run: npx playwright install --with-deps  // all browser binaries
 
       # 5️⃣ Run Playwright Tests
-      - name: Run Playwright Tests
+      - name: 🧪 Run Playwright Tests
         run: ENV=qa npx playwright test tests/loginpage.spec.ts
         env:
           DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
 
       # 6️⃣ Generate Allure HTML Report
-      - name: Generate Allure Report
+      - name: 📊 Generate Allure Report
         if: always()
         run: |
           if [ -d "allure-results" ]; then
@@ -58,7 +59,7 @@ jobs:
           ls -R playwright-html-report || echo "Playwright HTML report not found"
 
       # 8️⃣ Upload artifacts
-      - name: Upload Allure Report
+      - name: 📊 Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -66,7 +67,7 @@ jobs:
           path: allure-report/
           if-no-files-found: warn
 
-      - name: Upload Playwright Report
+      - name: 📊 Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -74,7 +75,7 @@ jobs:
           path: playwright-report/
           if-no-files-found: warn
 
-      - name: Upload Playwright HTML Reporter
+      - name: 📊 Upload Playwright HTML Reporter
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -89,27 +90,27 @@ jobs:
 
     steps:
       # 1️⃣ Checkout repo
-      - name: Checkout repo
+      - name: 📥 Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       # 2️⃣ Download artifacts
-      - name: Download Allure Report
+      - name: 📥 Download Allure Report
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: allure-report
           path: allure-report
 
-      - name: Download Playwright Report
+      - name: 📥 Download Playwright Report
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: playwright-report
           path: playwright-report
 
-      - name: Download Playwright HTML Reporter
+      - name: 📥 Download Playwright HTML Reporter
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
@@ -137,7 +138,7 @@ jobs:
           ls -R gh-pages-deploy
 
       # 5️⃣ Publish reports to GitHub Pages [This pushes the consolidated reports to a special branch called gh-pages]
-      - name: Publish Reports to GitHub Pages
+      - name: 🌐 Publish Reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -146,7 +147,7 @@ jobs:
           force_orphan: true
 
       # 6️⃣ Print final URLs
-      - name: Report URLs
+      - name: 🔗 Report URLs
         run: |
           echo "Reports Published!"
           echo "Playwright Built-in: https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-report/index.html"
