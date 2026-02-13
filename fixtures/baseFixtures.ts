@@ -1,11 +1,11 @@
-import {test as base, expect, Page} from '@playwright/test'
-import { HomePage } from '../pages/HomePage'
+import {test as base, expect} from '@playwright/test';
+import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { STORAGE_STATE_PATH } from '../playwright.config';
 
 
-const adminjsonFile = STORAGE_STATE_PATH('admin');
-const customerjsonFile = STORAGE_STATE_PATH('customer');
+// const adminjsonFile = STORAGE_STATE_PATH('admin');
+// const customerjsonFile = STORAGE_STATE_PATH('customer');
 
 /* 
     OPTION 1`:
@@ -24,7 +24,7 @@ export const test = base.extend<customFixtures>({
      const mypage = await context.newPage();   
      const loginPage = new LoginPage (mypage); 
      await loginPage.navigateLoginPage(baseURL);
-     let homePage = await loginPage.doLogin(testInfo.project.metadata.appAdminUsername, testInfo.project.metadata.appAdminPassword); 
+     const homePage = await loginPage.doLogin(testInfo.project.metadata.appAdminUsername, testInfo.project.metadata.appAdminPassword); 
      expect(await homePage.isUserLoggedIn()).toBeTruthy(); 
      await use(homePage);
      await context.close();
@@ -45,7 +45,7 @@ export const test = base.extend<customFixtures>({
      const mypage = await context.newPage();   
      const loginPage = new LoginPage (mypage); 
      await loginPage.navigateLoginPage(baseURL);
-     let homePage = await loginPage.doLogin(testInfo.project.metadata.appCustomerUsername, testInfo.project.metadata.appCustomerPassword); 
+     const homePage = await loginPage.doLogin(testInfo.project.metadata.appCustomerUsername, testInfo.project.metadata.appCustomerPassword); 
      expect(await homePage.isUserLoggedIn()).toBeTruthy(); 
      await use(homePage);
      await context.close();
@@ -80,7 +80,7 @@ export const test1 = base.extend<customFixtures1>({
             console.log('Active Cookies:', cookies.map(c => c.name));
                     
         const mypage = await context.newPage();
-        await mypage.goto(baseURL+"?route=account/account"); 
+        await mypage.goto(baseURL+'?route=account/account'); 
         const homepage = new HomePage (mypage);
         await use(homepage);
         await context.close();
@@ -91,7 +91,7 @@ export const test1 = base.extend<customFixtures1>({
                 {storageState: STORAGE_STATE_PATH('customer')!,
                  recordVideo: {dir: testInfo.outputPath('videos')}});
         const mypage = await context.newPage();
-        await mypage.goto(baseURL+"?route=account/account"); 
+        await mypage.goto(baseURL+'?route=account/account'); 
         const homepage = new HomePage (mypage);
         await use(homepage);
         await context.close();

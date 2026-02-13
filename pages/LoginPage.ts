@@ -1,10 +1,9 @@
-import { Page, Locator } from '@playwright/test'
+import { Page, Locator } from '@playwright/test';
 import { ElementUtil } from '../utils/ElementUtil'; 
 import { HomePage } from './HomePage';
-import { RegistrationPage } from '../pages/RegistrationPage'
+import { RegistrationPage } from '../pages/RegistrationPage';
 import { STORAGE_STATE_PATH } from '../playwright.config';
 
-import { Context } from 'node:vm';
 
 export class LoginPage {
 
@@ -29,9 +28,9 @@ export class LoginPage {
         this.emailId = page.getByRole('textbox', { name: 'E-Mail Address'});
         this.password = page.getByRole('textbox', { name: 'Password'});
         this.loginBtn = page.locator("input[type='submit'][value='Login']");
-        this.warningMsg = page.locator("div.alert.alert-danger.alert-dismissible");
+        this.warningMsg = page.locator('div.alert.alert-danger.alert-dismissible');
         this.registerLink = page.getByRole('link', { name: 'Register'}).nth(0);
-        this.rightPanelOptions = page.locator("#column-right .list-group a.list-group-item");
+        this.rightPanelOptions = page.locator('#column-right .list-group a.list-group-item');
         //#cdk-overlay-0 nz-option-item
     }
 
@@ -43,7 +42,7 @@ export class LoginPage {
         * navigate to login page
     */
     async navigateLoginPage(baseURL: string | undefined) {
-        await this.page.goto(baseURL+"?route=account/account"); 
+        await this.page.goto(baseURL+'?route=account/account'); 
     }
 
 
@@ -66,7 +65,7 @@ export class LoginPage {
      */
     async getWarningMsgforInvalidLogin(): Promise<string | null> {
         const errormsg = await this.eleUtil.getText(this.warningMsg); 
-        console.log("warning msg : "+errormsg);
+        console.log('warning msg : '+errormsg);
         return errormsg;
     }
 
@@ -81,7 +80,7 @@ export class LoginPage {
 
     // Save Session Storage State in Json files
     async saveSessionState(role: string) {
-        console.log("Json file path : "+ STORAGE_STATE_PATH(role));
+        console.log('Json file path : '+ STORAGE_STATE_PATH(role));
         await this.page.context().storageState({path: STORAGE_STATE_PATH(role)!});
     }
 

@@ -1,19 +1,19 @@
 // import {test,  expect} from '@playwright/test
-import { test, test1, expect} from '../fixtures/baseFixtures'
-import { LoginPage } from '../pages/LoginPage'
+import { test, test1, expect} from '../fixtures/baseFixtures';
+import { LoginPage } from '../pages/LoginPage';
 import { HomePage } from '../pages/HomePage';
 import { testData } from '../utils/dataLoader';
 
 
 test('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> { 
         expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);
-})
+});
 
 
 test('Verify Successful login for Customer User', {tag: ['@smoke', '@UI']}, async ({CustomerhomePage})=> {
         expect(await CustomerhomePage.getTitle()).toEqual(testData.homePageTitle);
 
-})
+});
 
 
  // From another Test1 (AUTH SETUP setup) base fixture
@@ -21,7 +21,7 @@ test1 ('Verify Successful login for Admin User (via auth setup)', {tag: ['@smoke
 
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);
-})
+});
 
 
 test1 ('Verify Successful login for Customer User (via auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
@@ -29,7 +29,7 @@ test1 ('Verify Successful login for Customer User (via auth setup)', {tag: ['@sm
         expect(await CustomerhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await CustomerhomePage.getTitle()).toEqual(testData.homePageTitle);
 
-})
+});
 
 
 test('Verify Invalid Login', 
@@ -44,21 +44,21 @@ test('Verify Invalid Login',
         ]
     },
     async ({page, baseURL})=> {
-        let loginpage =  new LoginPage (page);
+        const loginpage =  new LoginPage (page);
         await loginpage.navigateLoginPage(baseURL);
-        let homepage: HomePage = await loginpage.doLogin('abdsdscest2@nal.com', 'test125453');
+        const homepage: HomePage = await loginpage.doLogin('abdsdscest2@nal.com', 'test125453');
         expect(await homepage.getTitle()).toEqual(testData.loginPageTitle);
 
         const errormsg = await loginpage.getWarningMsgforInvalidLogin();
-        expect(errormsg).toContain("Warning:");
-})
+        expect(errormsg).toContain('Warning:');
+});
 
-test ("Login Page: Verify presence of all options on right side panel", {tag: ['@Smoke', '@UI']}, async ({page, baseURL})=> {
+test ('Login Page: Verify presence of all options on right side panel', {tag: ['@Smoke', '@UI']}, async ({page, baseURL})=> {
         test.setTimeout(60000); // timeout for this test
-        let loginpage = new LoginPage(page); 
+        const loginpage = new LoginPage(page); 
         await loginpage.navigateLoginPage(baseURL); 
         
-        let allOptions: string[] = await loginpage.getAllOptionsFromRightPanel(); 
+        const allOptions: string[] = await loginpage.getAllOptionsFromRightPanel(); 
         expect(allOptions.length).toEqual(testData.loginPageRightPanelOptions.length);
         expect(allOptions).toEqual(testData.loginPageRightPanelOptions);
-})
+});

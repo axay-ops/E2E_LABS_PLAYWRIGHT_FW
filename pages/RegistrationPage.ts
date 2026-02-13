@@ -1,4 +1,4 @@
-import {expect, Page, Locator} from '@playwright/test'
+import {expect, Page, Locator} from '@playwright/test';
 import {ElementUtil} from '../utils/ElementUtil'; 
 
 export class RegistrationPage{

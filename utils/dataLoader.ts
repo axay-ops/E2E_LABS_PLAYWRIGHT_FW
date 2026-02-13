@@ -3,10 +3,26 @@ import qaData from '../data/qa-testdata.json' with { type: 'json' };
 import stageData from '../data/stage-testdata.json' with { type: 'json' };
 
 const testenv = process.env.ENV || 'qa';
+let data: any;
 
-export const testData = qaData;
+switch (testenv) {
+        case 'qa':
+         data = qaData;       
+        break;
+        case 'dev':
+         data = devData; 
+        break;
+        case 'stage':
+        data = stageData; 
+        break;
+        default:
+        data = qaData;
+        break;
+}
 
-// export const testData = `${testenv}Data`;
+export const testData = data;
+
+//export const testData = `${testenv}Data`;
 // export const testData = process.env.ENV === 'prod' ? prodData : qaData;
 
 

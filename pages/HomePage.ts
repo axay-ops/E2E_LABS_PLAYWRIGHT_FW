@@ -1,7 +1,7 @@
-import { Page, Locator } from '@playwright/test'
-import { ElementUtil } from '../utils/ElementUtil'
+import { Page, Locator } from '@playwright/test';
+import { ElementUtil } from '../utils/ElementUtil';
 import { LoginPage } from './LoginPage';
-import { ResultsPage } from './ResultsPage'
+import { ResultsPage } from './ResultsPage';
 
 export class HomePage {
 
@@ -22,19 +22,19 @@ export class HomePage {
         this.listItemOnRightPanel = page.locator('.list-group-item');
         this.logoutlink =  page.locator("//a[@class='list-group-item'][contains(text(), 'Logout')]");
         this.searchInput = page.locator("//input[@name='search'][@type='text']");
-        this.searchIcon = page.locator("#search > span.input-group-btn > button.btn");  // 
+        this.searchIcon = page.locator('#search > span.input-group-btn > button.btn'); 
         this.logInLink =  page.locator("//a[@class='list-group-item'][contains(text(), 'Login')]");
         this.accountLoggedLabel = page.getByRole('heading', { name: 'Account Logout'});
     }
 
     async getTitle(): Promise<string|null> {
         const title = await this.page.title();
-        console.log("Page Title :" +title);
+        console.log('Page Title :' +title);
         return title;
     }
 
     async isUserLoggedIn(): Promise<boolean> {
-        return await this.eleUtil.isVisible(this.logoutlink)
+        return await this.eleUtil.isVisible(this.logoutlink);
     }
 
     async logout(): Promise <LoginPage> {
@@ -44,7 +44,7 @@ export class HomePage {
     }
 
     async doSearch(seachKey: string): Promise<ResultsPage> {
-        console.log("search key:  "+ seachKey)
+        console.log('search key:  '+ seachKey);
         await this.eleUtil.fill(this.searchInput, seachKey); 
         await this.eleUtil.click(this.searchIcon);
         return await new ResultsPage(this.page); 

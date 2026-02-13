@@ -1,5 +1,5 @@
-import {Page, Locator} from '@playwright/test'
-import { ElementUtil } from '../utils/ElementUtil'
+import {Page, Locator} from '@playwright/test';
+import { ElementUtil } from '../utils/ElementUtil';
 
 
 export class ProductsInfoPage {
@@ -19,8 +19,8 @@ export class ProductsInfoPage {
 
         this.page = page;
         this.eleUtil = new ElementUtil(page);
-        this.imageCount = page.locator("div#content img");
-        this.header = page.locator("h1");
+        this.imageCount = page.locator('div#content img');
+        this.header = page.locator('h1');
         this.productMetadata = page.locator("(//div[@id='content']//ul[@class='list-unstyled'])[1]/li");
         this.productPricedata = page.locator("(//div[@id='content']//ul[@class='list-unstyled'])[2]/li");
     }
@@ -44,28 +44,28 @@ export class ProductsInfoPage {
 
 
     async getProductMetaData () {
-         let myproductMetaData = await this.productMetadata.allInnerTexts();
-         for (let meta of myproductMetaData) {
-            let metadata: string[] = meta.split(':');
-            let metakey = metadata[0]?.trim() ?? "no data"; // ?? nullish coalescing 
-            let metavalue = metadata[1]?.trim() ?? "no data"; // ?? nullish coalescing 
+         const myproductMetaData = await this.productMetadata.allInnerTexts();
+         for (const meta of myproductMetaData) {
+            const metadata: string[] = meta.split(':');
+            const metakey = metadata[0]?.trim() ?? 'no data'; // ?? nullish coalescing 
+            const metavalue = metadata[1]?.trim() ?? 'no data'; // ?? nullish coalescing 
             this.productMap.set(metakey, metavalue); 
          }
       }
 
     async getProductPriceData () {
-         let myproductPriceData = await this.productPricedata.allInnerTexts();  
-            let productPrice = myproductPriceData[0]?.trim() ?? "no data";  // ?? nullish coalescing 
-            let productExTaxPrice = myproductPriceData[1]?.split(':')[1]?.trim()  ?? "no data";   // ?? nullish coalescing 
-            this.productMap.set("PriceIncTax", productPrice);
-            this.productMap.set("PriceExTax", productExTaxPrice); 
+         const myproductPriceData = await this.productPricedata.allInnerTexts();  
+            const productPrice = myproductPriceData[0]?.trim() ?? 'no data';  // ?? nullish coalescing 
+            const productExTaxPrice = myproductPriceData[1]?.split(':')[1]?.trim()  ?? 'no data';   // ?? nullish coalescing 
+            this.productMap.set('PriceIncTax', productPrice);
+            this.productMap.set('PriceExTax', productExTaxPrice); 
          
       }
 
     async getFullProductDetails (): Promise<Map<string, string | null | number>>  {
-            this.productMap.set ("title", await this.getTitle())
-            this.productMap.set ("header", await this.getProductHeading());
-            this.productMap.set ("imageCount", await this.getProductImageCount());
+            this.productMap.set ('title', await this.getTitle());
+            this.productMap.set ('header', await this.getProductHeading());
+            this.productMap.set ('imageCount', await this.getProductImageCount());
             await this.getProductMetaData();
             await this.getProductPriceData();
 

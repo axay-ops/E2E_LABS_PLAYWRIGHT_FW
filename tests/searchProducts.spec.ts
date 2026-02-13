@@ -1,24 +1,22 @@
 // import {test, expect} from '@playwright/test'
-import { test, expect} from '../fixtures/baseFixtures'
-import { LoginPage } from '../pages/LoginPage'
-import { HomePage } from '../pages/HomePage';
+import { test, expect} from '../fixtures/baseFixtures';
 import { ResultsPage } from '../pages/ResultsPage';
 
 
 // data provider for search results
-let searchData = [
+const searchData = [
         {key: 'macbook', results: 3},
         {key: 'samsung', results: 2},
         {key: 'imac', results: 1},
         {key: 'canon', results: 1},
         {key: 'dummy', results: 0},
-]
+];
 
-for (let product of searchData) {
+for (const product of searchData) {
 test(`Verify Search Product: ${product.key}`, {tag: ['@smoke', '@regression', '@UI', '@product']}, async ({AdminhomePage})=> {
-        let resultspage: ResultsPage = await AdminhomePage.doSearch(product.key); 
+        const resultspage: ResultsPage = await AdminhomePage.doSearch(product.key); 
         expect(await resultspage.getProductsCount()).toBe(product.results);
-})       
+});       
 }
 
 

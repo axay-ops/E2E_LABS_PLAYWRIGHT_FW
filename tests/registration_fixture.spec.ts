@@ -1,7 +1,7 @@
-import {test} from '../fixtures/dataFixtures'
-import { expect, Page} from '@playwright/test'
-import { LoginPage } from '../pages/LoginPage'
-import { RegistrationPage } from '../pages/RegistrationPage';
+// import {test} from '../fixtures/dataFixtures'
+// import { expect, Page} from '@playwright/test'
+// import { LoginPage } from '../pages/LoginPage'
+// import { RegistrationPage } from '../pages/RegistrationPage';
 
 // Limitation:  Single test with multiple iterations.
 

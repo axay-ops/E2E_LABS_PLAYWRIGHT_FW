@@ -1,4 +1,5 @@
-import {test as base, expect} from '@playwright/test'
+/* eslint-disable no-empty-pattern */
+import {test as base, expect} from '@playwright/test';
 import fs from 'fs'; 
 import {parse} from 'csv-parse/sync'; 
 
@@ -18,8 +19,8 @@ type csvFixture = {
 //export const test = base.extend<customFixtures>({
 export const test = base.extend<csvFixture>({
     regData: async ({}, use) => {
-        let csvfilecontent = fs.readFileSync('./data/registrationdata.csv', 'utf-8');
-        let userdata: registrationUserData[]  = parse(csvfilecontent, {
+        const csvfilecontent = fs.readFileSync('./data/registrationdata.csv', 'utf-8');
+        const userdata: registrationUserData[]  = parse(csvfilecontent, {
         columns: true,
         skip_empty_lines: true 
         });

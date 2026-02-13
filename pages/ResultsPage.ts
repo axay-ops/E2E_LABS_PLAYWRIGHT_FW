@@ -1,6 +1,6 @@
-import {Page, Locator} from '@playwright/test'
-import { ElementUtil } from '../utils/ElementUtil'
-import { ProductsInfoPage } from './ProductsInfoPage'
+import {Page, Locator} from '@playwright/test';
+import { ElementUtil } from '../utils/ElementUtil';
+import { ProductsInfoPage } from './ProductsInfoPage';
  
 export class ResultsPage {
 
@@ -12,7 +12,7 @@ export class ResultsPage {
     constructor(page: Page) {
         this.page = page; 
         this.eleUtil = new ElementUtil(page); 
-        this.products = page.locator(`div.product-thumb`)
+        this.products = page.locator('div.product-thumb');
     }
 
     async getProductsCount (): Promise <number> {

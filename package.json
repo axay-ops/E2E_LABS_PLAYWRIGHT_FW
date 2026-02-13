@@ -30,10 +30,10 @@
     "allure-commandline": "^2.36.0",
     "allure-playwright": "^3.4.5",
     "cross-env": "^10.1.0",
-    "eslint": "^10.0.0",
-    "@typescript-eslint/parser": "^10.0.0",
-    "eslint-plugin-playwright": "^2.5.1",
-    "playwright-html-reporter": "^0.1.11"
+    "eslint": "^8.57.0",
+    "playwright-html-reporter": "^0.1.11",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0"
   },
   "dependencies": {
     "csv-parse": "^6.1.0"
