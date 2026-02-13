@@ -249,7 +249,7 @@ jobs:
           echo "🔹 Browser: $BROWSER"
           echo ""
           echo "🏠 Main Dashboard:"
-          echo "   https://naveenanimation20.github.io/June2025PWFramework/"
+          echo "   https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/"
           echo ""
           echo "📊 ${ENV^^} Reports:"
           echo "   Playwright: https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/${ENV}/playwright-report/index.html"
