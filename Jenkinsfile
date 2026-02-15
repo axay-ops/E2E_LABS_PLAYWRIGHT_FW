@@ -61,7 +61,7 @@ pipeline {
                 echo '============================================'
                 echo '📥 Installing dependencies...'
                 echo '============================================'
-                sh 'npm ci'
+                bat 'npm ci'
 
                 echo '============================================'
                 echo '📁 Creating ESLint report directory...'
