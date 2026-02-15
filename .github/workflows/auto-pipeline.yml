@@ -22,7 +22,7 @@
 # NOTIFICATION_EMAILS  - Comma-separated recipient emails (any domain)
 # ============================================
 
-name: Playwright Auto Pipeline
+name: Auto Pipeline
 
 on:
   # Scheduled runs (cron job)

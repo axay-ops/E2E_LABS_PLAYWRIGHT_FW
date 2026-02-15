@@ -8,7 +8,7 @@
 # ✅ Reports published to GitHub Pages
 # ============================================
 
-name: Playwright Manual Run
+name: Manual Run
 
 on:
   workflow_dispatch:
@@ -192,7 +192,7 @@ jobs:
           <!DOCTYPE html>
           <html>
           <head>
-            <title>Playwright Manual Run - E2E LABS</title>
+            <title>Manual Run - E2E LABS</title>
             <style>
               body { font-family: Arial, sans-serif; max-width: 900px; margin: 50px auto; padding: 20px; }
               h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
@@ -209,7 +209,7 @@ jobs:
             </style>
           </head>
           <body>
-            <h1>🎭 Playwright Manual Run Reports</h1>
+            <h1>🎭 Manual Run Reports</h1>
             <p class="timestamp">Last updated: ${CURRENT_DATE}</p>
             
             <div class="info">
