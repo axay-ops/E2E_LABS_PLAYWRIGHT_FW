@@ -489,7 +489,7 @@ pipeline {
                 def devEmoji = devStatus == 'success' ? '✅' : '❌'
                 def qaEmoji = qaStatus == 'success' ? '✅' : '❌'
                 def stageEmoji = stageStatus == 'success' ? '✅' : '❌'
-                # def prodEmoji = prodStatus == 'success' ? '✅' : '❌'
+                def prodEmoji = prodStatus == 'success' ? '✅' : '❌'
 
                 echo """
 ============================================
@@ -544,7 +544,7 @@ ${prodEmoji} PROD:  ${prodStatus}
 ${env.DEV_EMOJI} DEV: ${env.DEV_TEST_STATUS}
 ${env.QA_EMOJI} QA: ${env.QA_TEST_STATUS}
 ${env.STAGE_EMOJI} STAGE: ${env.STAGE_TEST_STATUS}
-# ${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
+${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
 
 📊 <${env.BUILD_URL}allure|Combined Allure Report>
 🔗 <${env.BUILD_URL}|View Build>"""
