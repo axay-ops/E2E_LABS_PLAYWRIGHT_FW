@@ -38,7 +38,7 @@ pipeline {
         PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}/.cache/ms-playwright"
         SLACK_WEBHOOK_URL = credentials('slack-webhook-jenkins-secret')
         // Email recipients - update these with your actual email addresses
-        EMAIL_RECIPIENTS = 'cmsqa.automation@gmail.com, klop1760@gmail.com'
+        EMAIL_RECIPIENTS = 'cmsqa.automation@gmail.com'
         DEV_KEY = credentials('DOTENV_PRIVATE_KEY_DEV')
         QA_KEY = credentials('DOTENV_PRIVATE_KEY_QA')
         STAGE_KEY = credentials('DOTENV_PRIVATE_KEY_STAGE')
@@ -484,7 +484,7 @@ pipeline {
                 def devStatus = env.DEV_TEST_STATUS ?: 'unknown'
                 def qaStatus = env.QA_TEST_STATUS ?: 'unknown'
                 def stageStatus = env.STAGE_TEST_STATUS ?: 'unknown'
-                # def prodStatus = env.PROD_TEST_STATUS ?: 'unknown'
+                def prodStatus = env.PROD_TEST_STATUS ?: 'unknown'
 
                 def devEmoji = devStatus == 'success' ? '✅' : '❌'
                 def qaEmoji = qaStatus == 'success' ? '✅' : '❌'
@@ -498,7 +498,7 @@ pipeline {
 ${devEmoji} DEV:   ${devStatus}
 ${qaEmoji} QA:    ${qaStatus}
 ${stageEmoji} STAGE: ${stageStatus}
-# ${prodEmoji} PROD:  ${prodStatus}
+${prodEmoji} PROD:  ${prodStatus}
 ============================================
 """
 
@@ -522,7 +522,7 @@ ${stageEmoji} STAGE: ${stageStatus}
                 env.DEV_EMOJI = devEmoji
                 env.QA_EMOJI = qaEmoji
                 env.STAGE_EMOJI = stageEmoji
-                # env.PROD_EMOJI = prodEmoji
+                env.PROD_EMOJI = prodEmoji
             }
         }
 
@@ -623,13 +623,6 @@ ${env.STAGE_EMOJI} STAGE: ${env.STAGE_TEST_STATUS}
                     <td><a href="${env.BUILD_URL}STAGE_20Allure_20Report" class="btn btn-green">Allure</a></td>
                     <td><a href="${env.BUILD_URL}STAGE_20Playwright_20Report" class="btn">Playwright</a></td>
                     <td><a href="${env.BUILD_URL}STAGE_20HTML_20Report" class="btn btn-orange">HTML</a></td>
-                </tr>
-                <tr>
-                    <td>🚀 PROD</td>
-                    <td class="success">${env.PROD_TEST_STATUS}</td>
-                    <td><a href="${env.BUILD_URL}PROD_20Allure_20Report" class="btn btn-green">Allure</a></td>
-                    <td><a href="${env.BUILD_URL}PROD_20Playwright_20Report" class="btn">Playwright</a></td>
-                    <td><a href="${env.BUILD_URL}PROD_20HTML_20Report" class="btn btn-orange">HTML</a></td>
                 </tr>
             </table>
 
