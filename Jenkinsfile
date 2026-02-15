@@ -72,14 +72,14 @@ pipeline {
                 echo '🔍 Running ESLint...'
                 echo '============================================'
                 script {
-                    def eslintStatus = sh(script: 'npm run lint', returnStatus: true)
+                    def eslintStatus = bat(script: 'npm run lint', returnStatus: true)
                     env.ESLINT_STATUS = eslintStatus == 0 ? 'success' : 'failure'
                 }
 
                 echo '============================================'
                 echo '📊 Generating ESLint HTML Report...'
                 echo '============================================'
-                sh 'npm run lint:report || true'
+                bat 'npm run lint:report || true'
             }
             post {
                 always {
@@ -111,18 +111,18 @@ pipeline {
                 echo '============================================'
                 echo '🎭 Installing Playwright browsers...'
                 echo '============================================'
-                sh 'npx playwright install --with-deps chromium'
+                bat 'npx playwright install --with-deps chromium'
 
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                bat 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running DEV tests...'
                 echo '============================================'
                 script {
-                    env.DEV_TEST_STATUS = sh(
+                    env.DEV_TEST_STATUS = bat(
                         script: 'DOTENV_PRIVATE_KEY_DEV=${DEV_KEY} ENV=dev npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
@@ -131,7 +131,7 @@ pipeline {
                 echo '============================================'
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
-                sh '''
+                bat '''
                     mkdir -p allure-results
                     echo "Environment=DEV" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
@@ -141,7 +141,7 @@ pipeline {
             post {
                 always {
                     // Copy and generate DEV Allure Report
-                    sh '''
+                    bat '''
                         mkdir -p allure-results-dev
                         cp -r allure-results/* allure-results-dev/ 2>/dev/null || true
                         npx allure generate allure-results-dev --clean -o allure-report-dev || true
@@ -192,13 +192,13 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                bat 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running QA tests...'
                 echo '============================================'
                 script {
-                    env.QA_TEST_STATUS = sh(
+                    env.QA_TEST_STATUS = bat(
                         script: 'DOTENV_PRIVATE_KEY_QA=${QA_KEY} ENV=qa npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
@@ -207,7 +207,7 @@ pipeline {
                 echo '============================================'
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
-                sh '''
+                bat '''
                     mkdir -p allure-results
                     echo "Environment=QA" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
@@ -217,7 +217,7 @@ pipeline {
             post {
                 always {
                     // Copy and generate QA Allure Report
-                    sh '''
+                    bat '''
                         mkdir -p allure-results-qa
                         cp -r allure-results/* allure-results-qa/ 2>/dev/null || true
                         npx allure generate allure-results-qa --clean -o allure-report-qa || true
@@ -268,13 +268,13 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                bat 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running STAGE tests...'
                 echo '============================================'
                 script {
-                    env.STAGE_TEST_STATUS = sh(
+                    env.STAGE_TEST_STATUS = bat(
                         script: 'DOTENV_PRIVATE_KEY_STAGE=${STAGE_KEY} ENV=dev npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
@@ -283,7 +283,7 @@ pipeline {
                 echo '============================================'
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
-                sh '''
+                bat '''
                     mkdir -p allure-results
                     echo "Environment=STAGE" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
@@ -293,7 +293,7 @@ pipeline {
             post {
                 always {
                     // Copy and generate STAGE Allure Report
-                    sh '''
+                    bat '''
                         mkdir -p allure-results-stage
                         cp -r allure-results/* allure-results-stage/ 2>/dev/null || true
                         npx allure generate allure-results-stage --clean -o allure-report-stage || true
@@ -421,7 +421,7 @@ pipeline {
                 echo '📊 Generating Combined Allure Report...'
                 echo '============================================'
 
-                sh '''
+                bat '''
                     # Create combined results directory
                     mkdir -p allure-results-combined
                     
