@@ -116,7 +116,7 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                bat 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running DEV tests...'
@@ -192,7 +192,7 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                bat 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running QA tests...'
@@ -268,7 +268,7 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                bat 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running STAGE tests...'
