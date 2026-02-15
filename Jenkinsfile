@@ -116,7 +116,13 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                // sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                bat '''
+                    if exist allure-results rd /s /q allure-results
+                    if exist playwright-report rd /s /q playwright-report
+                    if exist playwright-html-report rd /s /q playwright-html-report
+                    if exist test-results rd /s /q test-results
+                '''    
 
                 echo '============================================'
                 echo '🧪 Running DEV tests...'
@@ -132,19 +138,18 @@ pipeline {
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
                 bat '''
-                    mkdir -p allure-results
-                    echo "Environment=DEV" > allure-results/environment.properties
-                    echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.dev.ts" >> allure-results/environment.properties
+                    if not exist allure-results mkdir allure-results
+                    echo Environment=DEV>allure-results/environment.properties
+                    echo Browser=Google Chrome>>allure-results/environment.properties
                 '''
             }
             post {
                 always {
                     // Copy and generate DEV Allure Report
                     bat '''
-                        mkdir -p allure-results-dev
-                        cp -r allure-results/* allure-results-dev/ 2>/dev/null || true
-                        npx allure generate allure-results-dev --clean -o allure-report-dev || true
+                        if not exist allure-results-dev mkdir allure-results-dev
+                        robocopy allure-results allure-results-dev /E /IS /IT || exit 0
+                        npx allure generate allure-results-dev --clean -o allure-report-dev || exit 0
                     '''
 
                     // Publish DEV Allure HTML Report
@@ -192,8 +197,13 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
-
+                // sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                bat '''
+                    if exist allure-results rd /s /q allure-results
+                    if exist playwright-report rd /s /q playwright-report
+                    if exist playwright-html-report rd /s /q playwright-html-report
+                    if exist test-results rd /s /q test-results
+                '''    
                 echo '============================================'
                 echo '🧪 Running QA tests...'
                 echo '============================================'
@@ -268,8 +278,13 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
-
+                //sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                bat '''
+                    if exist allure-results rd /s /q allure-results
+                    if exist playwright-report rd /s /q playwright-report
+                    if exist playwright-html-report rd /s /q playwright-html-report
+                    if exist test-results rd /s /q test-results
+                '''
                 echo '============================================'
                 echo '🧪 Running STAGE tests...'
                 echo '============================================'
