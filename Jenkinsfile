@@ -209,7 +209,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.QA_TEST_STATUS = bat(
-                        script: 'set "DOTENV_PRIVATE_KEY_QA=${DEV_QA}" & set "ENV=qa" & npx playwright test tests/loginpage.spec.ts',
+                        script: 'set "DOTENV_PRIVATE_KEY_QA=${QA_KEY}" & set "ENV=qa" & npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -447,10 +447,10 @@ pipeline {
                     robocopy allure-results-dev allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     robocopy allure-results-qa allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     robocopy allure-results-stage allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
-                    robocopy allure-results-prod allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
+                    # robocopy allure-results-prod allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     
                     # Create combined environment.properties
-                    echo "Environment=ALL (DEV, QA, STAGE, PROD)">allure-results-combined/environment.properties
+                    echo "Environment=ALL (DEV, QA, STAGE)">allure-results-combined/environment.properties
                     echo "Browser=Google Chrome">>allure-results-combined/environment.properties
                     echo "Pipeline=${JOB_NAME}">>allure-results-combined/environment.properties
                     echo "Build=${BUILD_NUMBER}">>allure-results-combined/environment.properties
@@ -484,12 +484,12 @@ pipeline {
                 def devStatus = env.DEV_TEST_STATUS ?: 'unknown'
                 def qaStatus = env.QA_TEST_STATUS ?: 'unknown'
                 def stageStatus = env.STAGE_TEST_STATUS ?: 'unknown'
-                def prodStatus = env.PROD_TEST_STATUS ?: 'unknown'
+                # def prodStatus = env.PROD_TEST_STATUS ?: 'unknown'
 
                 def devEmoji = devStatus == 'success' ? '✅' : '❌'
                 def qaEmoji = qaStatus == 'success' ? '✅' : '❌'
                 def stageEmoji = stageStatus == 'success' ? '✅' : '❌'
-                def prodEmoji = prodStatus == 'success' ? '✅' : '❌'
+                # def prodEmoji = prodStatus == 'success' ? '✅' : '❌'
 
                 echo """
 ============================================
@@ -498,7 +498,7 @@ pipeline {
 ${devEmoji} DEV:   ${devStatus}
 ${qaEmoji} QA:    ${qaStatus}
 ${stageEmoji} STAGE: ${stageStatus}
-${prodEmoji} PROD:  ${prodStatus}
+# ${prodEmoji} PROD:  ${prodStatus}
 ============================================
 """
 
@@ -506,11 +506,11 @@ ${prodEmoji} PROD:  ${prodStatus}
                 def statusEmoji = '✅'
                 def statusColor = 'good'
 
-                if (devStatus == 'failure' || qaStatus == 'failure' || stageStatus == 'failure' || prodStatus == 'failure') {
+                if (devStatus == 'failure' || qaStatus == 'failure' || stageStatus == 'failure') {
                     overallStatus = 'FAILURE'
                     statusEmoji = '❌'
                     statusColor = 'danger'
-                } else if (devStatus == 'unknown' || qaStatus == 'unknown' || stageStatus == 'unknown' || prodStatus == 'unknown') {
+                } else if (devStatus == 'unknown' || qaStatus == 'unknown' || stageStatus == 'unknown') {
                     overallStatus = 'UNSTABLE'
                     statusEmoji = '⚠️'
                     statusColor = 'warning'
@@ -522,7 +522,7 @@ ${prodEmoji} PROD:  ${prodStatus}
                 env.DEV_EMOJI = devEmoji
                 env.QA_EMOJI = qaEmoji
                 env.STAGE_EMOJI = stageEmoji
-                env.PROD_EMOJI = prodEmoji
+                # env.PROD_EMOJI = prodEmoji
             }
         }
 
@@ -544,7 +544,7 @@ ${prodEmoji} PROD:  ${prodStatus}
 ${env.DEV_EMOJI} DEV: ${env.DEV_TEST_STATUS}
 ${env.QA_EMOJI} QA: ${env.QA_TEST_STATUS}
 ${env.STAGE_EMOJI} STAGE: ${env.STAGE_TEST_STATUS}
-${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
+# ${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
 
 📊 <${env.BUILD_URL}allure|Combined Allure Report>
 🔗 <${env.BUILD_URL}|View Build>"""
@@ -776,13 +776,6 @@ ${env.PROD_EMOJI ?: '❓'} PROD: ${env.PROD_TEST_STATUS ?: 'not run'}
                     <td><a href="${env.BUILD_URL}STAGE_20Allure_20Report" class="btn btn-green">Allure</a></td>
                     <td><a href="${env.BUILD_URL}STAGE_20Playwright_20Report" class="btn">Playwright</a></td>
                     <td><a href="${env.BUILD_URL}STAGE_20HTML_20Report" class="btn btn-orange">HTML</a></td>
-                </tr>
-                <tr>
-                    <td>🚀 PROD</td>
-                    <td class="${env.PROD_TEST_STATUS == 'success' ? 'success' : 'failure'}">${env.PROD_TEST_STATUS ?: 'not run'}</td>
-                    <td><a href="${env.BUILD_URL}PROD_20Allure_20Report" class="btn btn-green">Allure</a></td>
-                    <td><a href="${env.BUILD_URL}PROD_20Playwright_20Report" class="btn">Playwright</a></td>
-                    <td><a href="${env.BUILD_URL}PROD_20HTML_20Report" class="btn btn-orange">HTML</a></td>
                 </tr>
             </table>
 
