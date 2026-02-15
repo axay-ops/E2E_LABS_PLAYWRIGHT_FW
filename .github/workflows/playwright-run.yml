@@ -1,4 +1,4 @@
-name: Playwright & Allure Reports
+name: QA Workflow
 
 on:
   workflow_dispatch:
