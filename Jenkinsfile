@@ -129,7 +129,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.DEV_TEST_STATUS = bat(
-                        script: 'DOTENV_PRIVATE_KEY_DEV=${DEV_KEY} ENV=dev npx playwright test tests/loginpage.spec.ts',
+                        script: 'set "DOTENV_PRIVATE_KEY_DEV=${DEV_KEY}" & set "ENV=dev" & npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
