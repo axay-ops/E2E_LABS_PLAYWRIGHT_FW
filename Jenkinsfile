@@ -40,7 +40,7 @@ pipeline {
         // Email recipients - update these with your actual email addresses
         EMAIL_RECIPIENTS = 'cmsqa.automation@gmail.com'
         DEV_KEY = credentials('DOTENV_PRIVATE_KEY_DEV')
-        QA_KEY = credentials('DOTENV_PRIVATE_KEY_QA')
+        QA_KEY  = credentials('DOTENV_PRIVATE_KEY_QA')
         STAGE_KEY = credentials('DOTENV_PRIVATE_KEY_STAGE')
         PROD_KEY = credentials('DOTENV_PRIVATE_KEY_PROD')
     }
@@ -209,7 +209,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.QA_TEST_STATUS = bat(
-                        script: 'set "DOTENV_PRIVATE_KEY_QA=${QA_KEY}" & set "ENV=qa" & npx playwright test tests/loginpage.spec.ts',
+                        script: "set \"DOTENV_PRIVATE_KEY_QA=${QA_KEY}\" & set \"ENV=qa\" & npx playwright test tests/loginpage.spec.ts",
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -665,7 +665,7 @@ ${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
 </html>""",
                         mimeType: 'text/html',
                         to: env.EMAIL_RECIPIENTS,
-                        from: 'CI Notifications <mail@naveenautomationlabs.com>',
+                        from: 'Jenkins Notifications <mail@naveenautomationlabs.com>',
                         replyTo: 'mail@naveenautomationlabs.com'
                     )
                 } catch (Exception e) {
@@ -811,7 +811,7 @@ ${env.PROD_EMOJI ?: '❓'} PROD: ${env.PROD_TEST_STATUS ?: 'not run'}
 </html>""",
                         mimeType: 'text/html',
                         to: env.EMAIL_RECIPIENTS,
-                        from: 'CI Notifications <mail@naveenautomationlabs.com>',
+                        from: 'Jenkins Notifications <mail@naveenautomationlabs.com>',
                         replyTo: 'mail@naveenautomationlabs.com'
                     )
                 } catch (Exception e) {
