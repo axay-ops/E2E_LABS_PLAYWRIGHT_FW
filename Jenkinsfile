@@ -209,7 +209,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.QA_TEST_STATUS = bat(
-                        script: 'DOTENV_PRIVATE_KEY_QA=${QA_KEY} ENV=qa npx playwright test tests/loginpage.spec.ts',
+                        script: 'set "DOTENV_PRIVATE_KEY_QA=${DEV_QA}" & set "ENV=qa" & npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -218,19 +218,18 @@ pipeline {
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
                 bat '''
-                    mkdir -p allure-results
-                    echo "Environment=QA" > allure-results/environment.properties
-                    echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.qa.ts" >> allure-results/environment.properties
+                    if not exist allure-results mkdir allure-results
+                    echo Environment=QA>allure-results/environment.properties
+                    echo Browser=Google Chrome>>allure-results/environment.properties
                 '''
             }
             post {
                 always {
                     // Copy and generate QA Allure Report
                     bat '''
-                        mkdir -p allure-results-qa
-                        cp -r allure-results/* allure-results-qa/ 2>/dev/null || true
-                        npx allure generate allure-results-qa --clean -o allure-report-qa || true
+                        if not exist allure-results-qa mkdir allure-results-qa
+                        robocopy allure-results allure-results-qa /E /IS /IT || exit 0
+                        npx allure generate allure-results-qa --clean -o allure-report-qa || exit 0
                     '''
 
                     // Publish QA Allure HTML Report
@@ -290,7 +289,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.STAGE_TEST_STATUS = bat(
-                        script: 'DOTENV_PRIVATE_KEY_STAGE=${STAGE_KEY} ENV=dev npx playwright test tests/loginpage.spec.ts',
+                        script: 'set "DOTENV_PRIVATE_KEY_STAGE=${STAGE_KEY}" & set "ENV=stage" & npx playwright test tests/loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -299,19 +298,18 @@ pipeline {
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
                 bat '''
-                    mkdir -p allure-results
-                    echo "Environment=STAGE" > allure-results/environment.properties
-                    echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.stage.ts" >> allure-results/environment.properties
+                    if not exist allure-results mkdir allure-results
+                    echo Environment=STAGE>allure-results/environment.properties
+                    echo Browser=Google Chrome>>allure-results/environment.properties
                 '''
             }
             post {
                 always {
                     // Copy and generate STAGE Allure Report
                     bat '''
-                        mkdir -p allure-results-stage
-                        cp -r allure-results/* allure-results-stage/ 2>/dev/null || true
-                        npx allure generate allure-results-stage --clean -o allure-report-stage || true
+                        if not exist allure-results-stage mkdir allure-results-stage
+                        robocopy allure-results allure-results-stage /E /IS /IT || exit 0
+                        npx allure generate allure-results-stage --clean -o allure-report-stage || exit 0
                     '''
 
                     // Publish STAGE Allure HTML Report
@@ -438,19 +436,24 @@ pipeline {
 
                 bat '''
                     # Create combined results directory
-                    mkdir -p allure-results-combined
+                    if not exist allure-results-combined mkdir allure-results-combined
                     
                     # Copy all environment results
-                    cp -r allure-results-dev/* allure-results-combined/ 2>/dev/null || true
-                    cp -r allure-results-qa/* allure-results-combined/ 2>/dev/null || true
-                    cp -r allure-results-stage/* allure-results-combined/ 2>/dev/null || true
-                    cp -r allure-results-prod/* allure-results-combined/ 2>/dev/null || true
+                    # cp -r allure-results-dev/* allure-results-combined/ 2>/dev/null || true
+                    # cp -r allure-results-qa/* allure-results-combined/ 2>/dev/null || true
+                    # cp -r allure-results-stage/* allure-results-combined/ 2>/dev/null || true
+                    # cp -r allure-results-prod/* allure-results-combined/ 2>/dev/null || true
+
+                    robocopy allure-results-dev allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
+                    robocopy allure-results-qa allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
+                    robocopy allure-results-stage allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
+                    robocopy allure-results-prod allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     
                     # Create combined environment.properties
-                    echo "Environment=ALL (DEV, QA, STAGE, PROD)" > allure-results-combined/environment.properties
-                    echo "Browser=Google Chrome" >> allure-results-combined/environment.properties
-                    echo "Pipeline=${JOB_NAME}" >> allure-results-combined/environment.properties
-                    echo "Build=${BUILD_NUMBER}" >> allure-results-combined/environment.properties
+                    echo "Environment=ALL (DEV, QA, STAGE, PROD)">allure-results-combined/environment.properties
+                    echo "Browser=Google Chrome">>allure-results-combined/environment.properties
+                    echo "Pipeline=${JOB_NAME}">>allure-results-combined/environment.properties
+                    echo "Build=${BUILD_NUMBER}">>allure-results-combined/environment.properties
                 '''
             }
             post {
