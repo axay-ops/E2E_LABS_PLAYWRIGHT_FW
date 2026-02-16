@@ -349,7 +349,7 @@ jobs:
                       "type": "section",
                       "text": {
                         "type": "mrkdwn",
-                        "text": "*Test Results by Environment:*\n${{ ${{ steps.status.outputs.qa_emoji }} QA: ${{ needs.tests.result }}"
+                        "text": "*Test Results by Environment:*\n${{ QA: ${{ needs.tests.result }}"
                       }
                     },
                     {
