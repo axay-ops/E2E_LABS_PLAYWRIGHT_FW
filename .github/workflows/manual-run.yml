@@ -44,14 +44,14 @@ on:
         options:
           - smoke
           - regression
-          - all 
+          - alltest 
 
 env:
   NODE_VERSION: '20'
 
 jobs:
   test:
-    name: 🧪 ${{ github.event.inputs.environment }} | ${{ github.event.inputs.browser }}
+    name: 🧪 ${{ github.event.inputs.environment }} | ${{ github.event.inputs.browser }} | ${{ github.event.inputs.test_type }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
@@ -94,7 +94,7 @@ jobs:
 
       - name: 🧪 Run Tests
         run: |
-          if [ "${{ github.event.inputs.test_type }}" == "all" ]; then
+          if [ "${{ github.event.inputs.test_type }}" == "alltest" ]; then
             ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts  --project="${{ github.event.inputs.browser }}"
           else
             ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts --grep "@${{ github.event.inputs.test_type }}" --project="${{ github.event.inputs.browser }}"
