@@ -1,8 +1,8 @@
 # ============================================
 # OPTION 1: FULLY AUTOMATED PIPELINE
 # ============================================
-# Flow: lint → dev → qa → stage → prod ->  (automatic)
-# Trigger: Push to develop/main branches, cron schedule
+# Flow: lint → dev → qa → stage → prod → Slack & Email
+# Trigger: Push to develop/main branches
 # Reports: Published to GitHub Pages
 # ✅ ESLint static code analysis
 # ✅ Playwright browsers cached for faster runs

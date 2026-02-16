@@ -320,7 +320,7 @@ jobs:
                       "type": "header",
                       "text": {
                         "type": "plain_text",
-                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Manual Run: ${{ steps.status.outputs.status_text }}",
+                        "text": "${{ steps.status.outputs.status_emoji }} Manual Run:   ${{ steps.status.outputs.status_text }}",
                         "emoji": true
                       }
                     },
