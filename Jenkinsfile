@@ -36,7 +36,7 @@ pipeline {
         NODE_VERSION = '20'
         CI = 'true'
         PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}/.cache/ms-playwright"
-        SLACK_WEBHOOK_URL = credentials('slack-webhook-jenkins-secret')
+        SLACK_WEBHOOK_URL = credentials('slack-webhook-token')
         // Email recipients - update these with your actual email addresses
         EMAIL_RECIPIENTS = 'cmsqa.automation@gmail.com'
         DEV_KEY = credentials('DOTENV_PRIVATE_KEY_DEV')
