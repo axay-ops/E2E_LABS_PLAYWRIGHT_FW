@@ -87,7 +87,8 @@ jobs:
 
       - name: 🧪 Run Tests
         run: |
-            npx @dotenvx/dotenvx run -f .env.${{ github.event.inputs.environment }} playwright test tests/loginpage.spec.ts \
+            npx @dotenvx/dotenvx run -f .env.${{ github.event.inputs.environment }} -- \
+            npx playwright test tests/loginpage.spec.ts \
             --project="${{ github.event.inputs.browser }}" 
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
