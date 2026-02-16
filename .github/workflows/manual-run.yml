@@ -47,6 +47,9 @@ jobs:
       name: ${{ github.event.inputs.environment }}
     
     steps:
+      - name: Convert Environment to Uppercase
+        run:  echo "ENV_UPPER=$(echo ${{ github.event.inputs.environment }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
+         
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
@@ -84,9 +87,10 @@ jobs:
 
       - name: 🧪 Run Tests
         run: |
-            ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts \
+            npx @dotenvx/dotenvx run -f .env.${{ github.event.inputs.environment }} playwright test tests/loginpage.spec.ts    \
             --project="${{ github.event.inputs.browser }}" 
         env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
           CI: true
 
       - name: 📊 Upload HTML Report
