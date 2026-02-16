@@ -126,7 +126,7 @@ jobs:
   publish-reports:
     name: 📈 Publish Reports
     runs-on: ubuntu-latest
-    needs: tests
+    needs: test
     if: always()
     
     steps:
