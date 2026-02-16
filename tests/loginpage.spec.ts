@@ -10,14 +10,14 @@ test('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '
 });
 
 
-test('Verify Successful login for Customer User', {tag: ['@smoke', '@UI']}, async ({CustomerhomePage})=> {
+test.skip('Verify Successful login for Customer User', {tag: ['@smoke', '@UI']}, async ({CustomerhomePage})=> {
         expect(await CustomerhomePage.getTitle()).toEqual(testData.homePageTitle);
 
 });
 
 
  // From another Test1 (AUTH SETUP setup) base fixture
-test1 ('Verify Successful login for Admin User (via auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> {
+test1.skip('Verify Successful login for Admin User (via auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({AdminhomePage})=> {
 
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);

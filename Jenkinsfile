@@ -123,7 +123,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.DEV_TEST_STATUS = sh(
-                        script: 'npx playwright test --grep "@login" --config=playwright.config.dev.ts',
+                        script: 'DOTENV_PRIVATE_KEY_DEV=${DEV_KEY} ENV=dev npx playwright test ./loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -135,7 +135,7 @@ pipeline {
                     mkdir -p allure-results
                     echo "Environment=DEV" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.dev.ts" >> allure-results/environment.properties
+                    echo "Config=playwright.config.ts" >> allure-results/environment.properties
                 '''
             }
             post {
@@ -199,7 +199,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.QA_TEST_STATUS = sh(
-                        script: 'npx playwright test --grep "@login" --config=playwright.config.qa.ts',
+                        script: 'DOTENV_PRIVATE_KEY_QA=${QA_KEY} ENV=qa npx playwright test ./loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -211,7 +211,7 @@ pipeline {
                     mkdir -p allure-results
                     echo "Environment=QA" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.qa.ts" >> allure-results/environment.properties
+                    echo "Config=playwright.config.ts" >> allure-results/environment.properties
                 '''
             }
             post {
@@ -275,7 +275,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.STAGE_TEST_STATUS = sh(
-                        script: 'npx playwright test --grep "@login" --config=playwright.config.stage.ts',
+                        script: 'DOTENV_PRIVATE_KEY_STAGE=${STAGE_KEY} ENV=stage npx playwright test ./loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -287,7 +287,7 @@ pipeline {
                     mkdir -p allure-results
                     echo "Environment=STAGE" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.stage.ts" >> allure-results/environment.properties
+                    echo "Config=playwright.config.ts" >> allure-results/environment.properties
                 '''
             }
             post {
@@ -351,7 +351,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.PROD_TEST_STATUS = sh(
-                        script: 'npx playwright test --grep "@login" --config=playwright.config.prod.ts',
+                        script: 'DOTENV_PRIVATE_KEY_PROD=${PROD_KEY} ENV=prod npx playwright test ./loginpage.spec.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -363,7 +363,7 @@ pipeline {
                     mkdir -p allure-results
                     echo "Environment=PROD" > allure-results/environment.properties
                     echo "Browser=Google Chrome" >> allure-results/environment.properties
-                    echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
+                    echo "Config=playwright.config.ts" >> allure-results/environment.properties
                 '''
             }
             post {
