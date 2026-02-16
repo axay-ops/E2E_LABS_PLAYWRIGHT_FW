@@ -1,0 +1,28 @@
+{
+  "homePageTitle": "My Account",
+  "loginPageTitle": "Account Login",
+  "loginPageWarningmsg": "",
+  "loginPageWarningMsgLimits": "",
+  "loginPageRightPanelOptions": ["Login", "Register", "Forgotten Password", "My Account", "Address Book", "Wish List", "Order History", "Downloads", "Recurring payments",
+                                  "Reward Points", "Returns", "Transactions","Newsletter"],
+  "searchData": [
+    {"searchKey": "macbook", "productName": "MacBook",  "productImageCount": 5},
+    {"searchKey": "MacBook Air", "productName": "MacBook Air", "productImageCount": 4},
+    {"searchKey": "samsung", "productName": "Samsung Galaxy Tab 10.1",  "productImageCount": 7}],
+    
+  "ProductData": [  
+    {"searchKey": "macbook", "productName": "MacBook", "ResultCount": 3, "productImageCount": 5, 
+        "Brand": "Apple", "ProductCode": "Product 16", "RewardPoints": "600", "Availability":"In Stock",
+        "Price":"$602.00", "ExTax": "$500.00"  
+    },
+    {"searchKey": "MacBook Air", "productName": "MacBook Air", "ResultCount": 1, "productImageCount": 4, 
+        "Brand": "Apple", "ProductCode": "Product 17", "RewardPoints": "700", "Availability":"Out Of Stock",
+        "Price":"$1,202.00", "ExTax": "$1,000.00"
+    },
+    {"searchKey": "samsung", "productName": "Samsung Galaxy Tab 10.1", "ResultCount": 2,  "productImageCount": 7,
+         "Brand": "Samsung", "ProductCode": "SAM1", "RewardPoints": "1000", "Availability":"Pre-Order", 
+        "Price":"$241.99", "ExTax": "$199.99"
+    }]
+}
+
+
