@@ -61,25 +61,25 @@ pipeline {
                 echo '============================================'
                 echo '📥 Installing dependencies...'
                 echo '============================================'
-                bat 'npm ci'
+                sh 'npm ci'
 
                 echo '============================================'
                 echo '📁 Creating ESLint report directory...'
                 echo '============================================'
-                bat  'if not exist eslint-report mkdir eslint-report'
+                sh 'mkdir -p eslint-report'
 
                 echo '============================================'
                 echo '🔍 Running ESLint...'
                 echo '============================================'
                 script {
-                    def eslintStatus = bat(script: 'npm run lint', returnStatus: true)
+                    def eslintStatus = sh(script: 'npm run lint', returnStatus: true)
                     env.ESLINT_STATUS = eslintStatus == 0 ? 'success' : 'failure'
                 }
 
                 echo '============================================'
                 echo '📊 Generating ESLint HTML Report...'
                 echo '============================================'
-                bat 'npm run lint:report || true'
+                sh 'npm run lint:report || true'
             }
             post {
                 always {
@@ -111,35 +111,19 @@ pipeline {
                 echo '============================================'
                 echo '🎭 Installing Playwright browsers...'
                 echo '============================================'
-                bat 'npx playwright install --with-deps chromium'
+                sh 'npx playwright install --with-deps chromium'
 
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                // sh 'rm -rf allure-results playwright-report playwright-html-report test-results allure-results-dev allure-results-qa allure-results-stage allure-results-prod'
-                bat '''
-                    if exist allure-results rd /s /q allure-results
-                    if exist playwright-report rd /s /q playwright-report
-                    if exist playwright-html-report rd /s /q playwright-html-report
-                    if exist test-results rd /s /q test-results
-                    if exist allure-results-dev rd /s /q allure-results-dev
-                    if exist allure-results-qa rd /s /q allure-results-qa
-                    if exist allure-results-stage rd /s /q allure-results-stage
-                    if exist allure-results-prod rd /s /q allure-results-prod
-                    if exist allure-results-combined rd /s /q allure-results-combined
-                    if exist allure-report rd /s /q allure-report
-                    if exist allure-report-dev rd /s /q allure-report-dev
-                    if exist allure-report-qa rd /s /q allure-report-qa
-                    if exist allure-report-stage rd /s /q allure-report-stage
-                    if exist allure-report-prod rd /s /q allure-report-prod
-                '''    
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
 
                 echo '============================================'
                 echo '🧪 Running DEV tests...'
                 echo '============================================'
                 script {
-                    env.DEV_TEST_STATUS = bat(
-                        script: 'set "DOTENV_PRIVATE_KEY_DEV=${DEV_KEY}" & set "ENV=dev" & npx playwright test tests/loginpage.spec.ts',
+                    env.DEV_TEST_STATUS = sh(
+                        script: 'npx playwright test --grep "@login" --config=playwright.config.dev.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -147,19 +131,20 @@ pipeline {
                 echo '============================================'
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
-                bat '''
-                    if not exist allure-results mkdir allure-results
-                    echo Environment=DEV>allure-results/environment.properties
-                    echo Browser=Google Chrome>>allure-results/environment.properties
+                sh '''
+                    mkdir -p allure-results
+                    echo "Environment=DEV" > allure-results/environment.properties
+                    echo "Browser=Google Chrome" >> allure-results/environment.properties
+                    echo "Config=playwright.config.dev.ts" >> allure-results/environment.properties
                 '''
             }
             post {
                 always {
                     // Copy and generate DEV Allure Report
-                    bat '''
-                        if not exist allure-results-dev mkdir allure-results-dev
-                        robocopy allure-results allure-results-dev /E /IS /IT || exit /b0
-                        npx allure generate allure-results-dev --clean -o allure-report-dev || exit 0
+                    sh '''
+                        mkdir -p allure-results-dev
+                        cp -r allure-results/* allure-results-dev/ 2>/dev/null || true
+                        npx allure generate allure-results-dev --clean -o allure-report-dev || true
                     '''
 
                     // Publish DEV Allure HTML Report
@@ -173,7 +158,6 @@ pipeline {
                         reportTitles: 'DEV Allure Report'
                     ])
 
-                    // Publish DEV HTML Report
                     publishHTML(target: [
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
@@ -184,7 +168,6 @@ pipeline {
                         reportTitles: 'DEV Playwright Report'
                     ])
 
-                    // Publish DEV Playwright-HTML Report
                     publishHTML(target: [
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
@@ -209,19 +192,14 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                // sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
-                bat '''
-                    if exist allure-results rd /s /q allure-results
-                    if exist playwright-report rd /s /q playwright-report
-                    if exist playwright-html-report rd /s /q playwright-html-report
-                    if exist test-results rd /s /q test-results
-                '''    
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+
                 echo '============================================'
                 echo '🧪 Running QA tests...'
                 echo '============================================'
                 script {
-                    env.QA_TEST_STATUS = bat(
-                        script: "set \"DOTENV_PRIVATE_KEY_QA=${QA_KEY}\" & set \"ENV=qa\" & npx playwright test tests/loginpage.spec.ts",
+                    env.QA_TEST_STATUS = sh(
+                        script: 'npx playwright test --grep "@login" --config=playwright.config.qa.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -229,19 +207,20 @@ pipeline {
                 echo '============================================'
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
-                bat '''
-                    if not exist allure-results mkdir allure-results
-                    echo Environment=QA>allure-results/environment.properties
-                    echo Browser=Google Chrome>>allure-results/environment.properties
+                sh '''
+                    mkdir -p allure-results
+                    echo "Environment=QA" > allure-results/environment.properties
+                    echo "Browser=Google Chrome" >> allure-results/environment.properties
+                    echo "Config=playwright.config.qa.ts" >> allure-results/environment.properties
                 '''
             }
             post {
                 always {
                     // Copy and generate QA Allure Report
-                    bat '''
-                        if not exist allure-results-qa mkdir allure-results-qa
-                        robocopy allure-results allure-results-qa /E /IS /IT || exit 0
-                        npx allure generate allure-results-qa --clean -o allure-report-qa || exit 0
+                    sh '''
+                        mkdir -p allure-results-qa
+                        cp -r allure-results/* allure-results-qa/ 2>/dev/null || true
+                        npx allure generate allure-results-qa --clean -o allure-report-qa || true
                     '''
 
                     // Publish QA Allure HTML Report
@@ -289,19 +268,14 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                //sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
-                bat '''
-                    if exist allure-results rd /s /q allure-results
-                    if exist playwright-report rd /s /q playwright-report
-                    if exist playwright-html-report rd /s /q playwright-html-report
-                    if exist test-results rd /s /q test-results
-                '''
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+
                 echo '============================================'
                 echo '🧪 Running STAGE tests...'
                 echo '============================================'
                 script {
-                    env.STAGE_TEST_STATUS = bat(
-                        script: 'set "DOTENV_PRIVATE_KEY_STAGE=${STAGE_KEY}" & set "ENV=stage" & npx playwright test tests/loginpage.spec.ts',
+                    env.STAGE_TEST_STATUS = sh(
+                        script: 'npx playwright test --grep "@login" --config=playwright.config.stage.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -309,19 +283,20 @@ pipeline {
                 echo '============================================'
                 echo '🏷️ Adding Allure environment info...'
                 echo '============================================'
-                bat '''
-                    if not exist allure-results mkdir allure-results
-                    echo Environment=STAGE>allure-results/environment.properties
-                    echo Browser=Google Chrome>>allure-results/environment.properties
+                sh '''
+                    mkdir -p allure-results
+                    echo "Environment=STAGE" > allure-results/environment.properties
+                    echo "Browser=Google Chrome" >> allure-results/environment.properties
+                    echo "Config=playwright.config.stage.ts" >> allure-results/environment.properties
                 '''
             }
             post {
                 always {
                     // Copy and generate STAGE Allure Report
-                    bat '''
-                        if not exist allure-results-stage mkdir allure-results-stage
-                        robocopy allure-results allure-results-stage /E /IS /IT || exit 0
-                        npx allure generate allure-results-stage --clean -o allure-report-stage || exit 0
+                    sh '''
+                        mkdir -p allure-results-stage
+                        cp -r allure-results/* allure-results-stage/ 2>/dev/null || true
+                        npx allure generate allure-results-stage --clean -o allure-report-stage || true
                     '''
 
                     // Publish STAGE Allure HTML Report
@@ -362,6 +337,82 @@ pipeline {
         }
 
         // ============================================
+        // PROD Environment Tests
+        // ============================================
+        stage('🚀 PROD Tests') {
+            steps {
+                echo '============================================'
+                echo '🧹 Cleaning previous results...'
+                echo '============================================'
+                sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+
+                echo '============================================'
+                echo '🧪 Running PROD tests...'
+                echo '============================================'
+                script {
+                    env.PROD_TEST_STATUS = sh(
+                        script: 'npx playwright test --grep "@login" --config=playwright.config.prod.ts',
+                        returnStatus: true
+                    ) == 0 ? 'success' : 'failure'
+                }
+
+                echo '============================================'
+                echo '🏷️ Adding Allure environment info...'
+                echo '============================================'
+                sh '''
+                    mkdir -p allure-results
+                    echo "Environment=PROD" > allure-results/environment.properties
+                    echo "Browser=Google Chrome" >> allure-results/environment.properties
+                    echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
+                '''
+            }
+            post {
+                always {
+                    // Copy and generate PROD Allure Report
+                    sh '''
+                        mkdir -p allure-results-prod
+                        cp -r allure-results/* allure-results-prod/ 2>/dev/null || true
+                        npx allure generate allure-results-prod --clean -o allure-report-prod || true
+                    '''
+
+                    // Publish PROD Allure HTML Report
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'allure-report-prod',
+                        reportFiles: 'index.html',
+                        reportName: 'PROD Allure Report',
+                        reportTitles: 'PROD Allure Report'
+                    ])
+
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'PROD Playwright Report',
+                        reportTitles: 'PROD Playwright Report'
+                    ])
+
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'playwright-html-report',
+                        reportFiles: 'index.html',
+                        reportName: 'PROD HTML Report',
+                        reportTitles: 'PROD Custom HTML Report'
+                    ])
+
+                    archiveArtifacts artifacts: 'allure-results-prod/**/*', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
+                }
+            }
+        }
+
+        // ============================================
         // Generate Combined Allure Report (All Environments)
         // ============================================
         stage('📈 Combined Allure Report') {
@@ -370,20 +421,21 @@ pipeline {
                 echo '📊 Generating Combined Allure Report...'
                 echo '============================================'
 
-                bat '''
+                sh '''
                     # Create combined results directory
-                    if not exist allure-results-combined mkdir allure-results-combined
+                    mkdir -p allure-results-combined
                     
-                    robocopy allure-results-dev allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
-                    robocopy allure-results-qa allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
-                    robocopy allure-results-stage allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
-                    robocopy allure-results-prod allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
+                    # Copy all environment results
+                    cp -r allure-results-dev/* allure-results-combined/ 2>/dev/null || true
+                    cp -r allure-results-qa/* allure-results-combined/ 2>/dev/null || true
+                    cp -r allure-results-stage/* allure-results-combined/ 2>/dev/null || true
+                    cp -r allure-results-prod/* allure-results-combined/ 2>/dev/null || true
                     
                     # Create combined environment.properties
-                    echo "Environment=ALL (DEV, QA, STAGE)">allure-results-combined/environment.properties
-                    echo "Browser=Google Chrome">>allure-results-combined/environment.properties
-                    echo "Pipeline=${JOB_NAME}">>allure-results-combined/environment.properties
-                    echo "Build=${BUILD_NUMBER}">>allure-results-combined/environment.properties
+                    echo "Environment=ALL (DEV, QA, STAGE, PROD)" > allure-results-combined/environment.properties
+                    echo "Browser=Google Chrome" >> allure-results-combined/environment.properties
+                    echo "Pipeline=${JOB_NAME}" >> allure-results-combined/environment.properties
+                    echo "Build=${BUILD_NUMBER}" >> allure-results-combined/environment.properties
                 '''
             }
             post {
@@ -436,11 +488,11 @@ ${prodEmoji} PROD:  ${prodStatus}
                 def statusEmoji = '✅'
                 def statusColor = 'good'
 
-                if (devStatus == 'failure' || qaStatus == 'failure' || stageStatus == 'failure') {
+                if (devStatus == 'failure' || qaStatus == 'failure' || stageStatus == 'failure' || prodStatus == 'failure') {
                     overallStatus = 'FAILURE'
                     statusEmoji = '❌'
                     statusColor = 'danger'
-                } else if (devStatus == 'unknown' || qaStatus == 'unknown' || stageStatus == 'unknown') {
+                } else if (devStatus == 'unknown' || qaStatus == 'unknown' || stageStatus == 'unknown' || prodStatus == 'unknown') {
                     overallStatus = 'UNSTABLE'
                     statusEmoji = '⚠️'
                     statusColor = 'warning'
@@ -554,6 +606,13 @@ ${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
                     <td><a href="${env.BUILD_URL}STAGE_20Playwright_20Report" class="btn">Playwright</a></td>
                     <td><a href="${env.BUILD_URL}STAGE_20HTML_20Report" class="btn btn-orange">HTML</a></td>
                 </tr>
+                <tr>
+                    <td>🚀 PROD</td>
+                    <td class="success">${env.PROD_TEST_STATUS}</td>
+                    <td><a href="${env.BUILD_URL}PROD_20Allure_20Report" class="btn btn-green">Allure</a></td>
+                    <td><a href="${env.BUILD_URL}PROD_20Playwright_20Report" class="btn">Playwright</a></td>
+                    <td><a href="${env.BUILD_URL}PROD_20HTML_20Report" class="btn btn-orange">HTML</a></td>
+                </tr>
             </table>
 
             <div class="section-title">📊 Quick Links</div>
@@ -595,7 +654,7 @@ ${env.PROD_EMOJI} PROD: ${env.PROD_TEST_STATUS}
 </html>""",
                         mimeType: 'text/html',
                         to: env.EMAIL_RECIPIENTS,
-                        from: 'Jenkins Notifications <mail@naveenautomationlabs.com>',
+                        from: 'CI Notifications <mail@naveenautomationlabs.com>',
                         replyTo: 'mail@naveenautomationlabs.com'
                     )
                 } catch (Exception e) {
@@ -700,6 +759,13 @@ ${env.PROD_EMOJI ?: '❓'} PROD: ${env.PROD_TEST_STATUS ?: 'not run'}
                     <td><a href="${env.BUILD_URL}STAGE_20Playwright_20Report" class="btn">Playwright</a></td>
                     <td><a href="${env.BUILD_URL}STAGE_20HTML_20Report" class="btn btn-orange">HTML</a></td>
                 </tr>
+                <tr>
+                    <td>🚀 PROD</td>
+                    <td class="${env.PROD_TEST_STATUS == 'success' ? 'success' : 'failure'}">${env.PROD_TEST_STATUS ?: 'not run'}</td>
+                    <td><a href="${env.BUILD_URL}PROD_20Allure_20Report" class="btn btn-green">Allure</a></td>
+                    <td><a href="${env.BUILD_URL}PROD_20Playwright_20Report" class="btn">Playwright</a></td>
+                    <td><a href="${env.BUILD_URL}PROD_20HTML_20Report" class="btn btn-orange">HTML</a></td>
+                </tr>
             </table>
 
             <div class="section-title">📊 Quick Links</div>
@@ -741,7 +807,7 @@ ${env.PROD_EMOJI ?: '❓'} PROD: ${env.PROD_TEST_STATUS ?: 'not run'}
 </html>""",
                         mimeType: 'text/html',
                         to: env.EMAIL_RECIPIENTS,
-                        from: 'Jenkins Notifications <mail@naveenautomationlabs.com>',
+                        from: 'CI Notifications <mail@naveenautomationlabs.com>',
                         replyTo: 'mail@naveenautomationlabs.com'
                     )
                 } catch (Exception e) {
