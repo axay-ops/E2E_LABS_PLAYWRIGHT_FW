@@ -86,7 +86,7 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run Tests
-        run: ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts --project="${{ github.event.inputs.browser }}
+        run: ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts --project="${{ github.event.inputs.browser }}"
         env:
           DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
           CI: true
