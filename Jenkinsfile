@@ -127,6 +127,11 @@ pipeline {
                     if exist allure-results-stage rd /s /q allure-results-stage
                     if exist allure-results-prod rd /s /q allure-results-prod
                     if exist allure-results-combined rd /s /q allure-results-combined
+                    if exist allure-report rd /s /q allure-report
+                    if exist allure-report-dev rd /s /q allure-report-dev
+                    if exist allure-report-qa rd /s /q allure-report-qa
+                    if exist allure-report-stage rd /s /q allure-report-stage
+                    if exist allure-report-prod rd /s /q allure-report-prod
                 '''    
 
                 echo '============================================'
@@ -353,82 +358,6 @@ pipeline {
                 }
             }
         }
-
-        // ============================================
-        // PROD Environment Tests
-        // ============================================
-        // stage('🚀 PROD Tests') {
-        //     steps {
-        //         echo '============================================'
-        //         echo '🧹 Cleaning previous results...'
-        //         echo '============================================'
-        //         sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
-
-        //         echo '============================================'
-        //         echo '🧪 Running PROD tests...'
-        //         echo '============================================'
-        //         script {
-        //             env.PROD_TEST_STATUS = sh(
-        //                 script: 'DOTENV_PRIVATE_KEY_PROD=${PROD_KEY} ENV=prod npx playwright test tests/loginpage.spec.ts',
-        //                 returnStatus: true
-        //             ) == 0 ? 'success' : 'failure'
-        //         }
-
-        //         echo '============================================'
-        //         echo '🏷️ Adding Allure environment info...'
-        //         echo '============================================'
-        //         sh '''
-        //             mkdir -p allure-results
-        //             echo "Environment=PROD" > allure-results/environment.properties
-        //             echo "Browser=Google Chrome" >> allure-results/environment.properties
-        //             echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
-        //         '''
-        //     }
-        //     post {
-        //         always {
-        //             // Copy and generate PROD Allure Report
-        //             sh '''
-        //                 mkdir -p allure-results-prod
-        //                 cp -r allure-results/* allure-results-prod/ 2>/dev/null || true
-        //                 npx allure generate allure-results-prod --clean -o allure-report-prod || true
-        //             '''
-
-        //             // Publish PROD Allure HTML Report
-        //             publishHTML(target: [
-        //                 allowMissing: true,
-        //                 alwaysLinkToLastBuild: true,
-        //                 keepAll: true,
-        //                 reportDir: 'allure-report-prod',
-        //                 reportFiles: 'index.html',
-        //                 reportName: 'PROD Allure Report',
-        //                 reportTitles: 'PROD Allure Report'
-        //             ])
-
-        //             publishHTML(target: [
-        //                 allowMissing: true,
-        //                 alwaysLinkToLastBuild: true,
-        //                 keepAll: true,
-        //                 reportDir: 'playwright-report',
-        //                 reportFiles: 'index.html',
-        //                 reportName: 'PROD Playwright Report',
-        //                 reportTitles: 'PROD Playwright Report'
-        //             ])
-
-        //             publishHTML(target: [
-        //                 allowMissing: true,
-        //                 alwaysLinkToLastBuild: true,
-        //                 keepAll: true,
-        //                 reportDir: 'playwright-html-report',
-        //                 reportFiles: 'index.html',
-        //                 reportName: 'PROD HTML Report',
-        //                 reportTitles: 'PROD Custom HTML Report'
-        //             ])
-
-        //             archiveArtifacts artifacts: 'allure-results-prod/**/*', allowEmptyArchive: true
-        //             archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
-        //         }
-        //     }
-        // }
 
         // ============================================
         // Generate Combined Allure Report (All Environments)
