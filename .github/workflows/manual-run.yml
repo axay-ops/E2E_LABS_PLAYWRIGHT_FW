@@ -47,9 +47,6 @@ jobs:
       name: ${{ github.event.inputs.environment }}
     
     steps:
-      - name: Convert Environment to Uppercase
-        run:  echo "ENV_UPPER=$(echo ${{ github.event.inputs.environment }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
-         
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
@@ -129,7 +126,7 @@ jobs:
   publish-reports:
     name: 📈 Publish Reports
     runs-on: ubuntu-latest
-    needs: test
+    needs: tests
     if: always()
     
     steps:
@@ -259,9 +256,9 @@ jobs:
           echo ""
           echo "============================================"
 
-  # ============================================
+# ============================================
   # Slack Notifications
-  # ============================================
+# ============================================
   notify:
     name: 📬 Send Notifications
     runs-on: ubuntu-latest
