@@ -260,7 +260,7 @@ jobs:
           echo "============================================"
 
   # ============================================
-  # Slack & Email Notifications
+  # Slack Notifications
   # ============================================
   notify:
     name: 📬 Send Notifications
@@ -352,7 +352,7 @@ jobs:
                       "type": "section",
                       "text": {
                         "type": "mrkdwn",
-                        "text": "*Test Results by Environment:*\n${{ steps.status.outputs.dev_emoji }} DEV: ${{ needs.dev-tests.result }}\n${{ steps.status.outputs.qa_emoji }} QA: ${{ needs.qa-tests.result }}\n${{ steps.status.outputs.stage_emoji }} STAGE: ${{ needs.stage-tests.result }}\n${{ steps.status.outputs.prod_emoji }} PROD: ${{ needs.prod-tests.result }}"
+                        "text": "*Test Results by Environment:*\n${{ ${{ steps.status.outputs.qa_emoji }} QA: ${{ needs.tests.result }}"
                       }
                     },
                     {
