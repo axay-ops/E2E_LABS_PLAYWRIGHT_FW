@@ -31,9 +31,9 @@ on:
 
   workflow_dispatch:
   push:
-    branches: [main, develop]
+    branches: [main1, develop]
   pull_request:
-    branches: [main]
+    branches: [main1]
 
 env:
   NODE_VERSION: '20'
