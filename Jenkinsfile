@@ -66,7 +66,7 @@ pipeline {
                 echo '============================================'
                 echo '📁 Creating ESLint report directory...'
                 echo '============================================'
-                bat  'if not exist eslint-report mkdir -p eslint-report'
+                bat  'if not exist eslint-report mkdir eslint-report'
 
                 echo '============================================'
                 echo '🔍 Running ESLint...'
@@ -173,6 +173,7 @@ pipeline {
                         reportTitles: 'DEV Allure Report'
                     ])
 
+                    // Publish DEV HTML Report
                     publishHTML(target: [
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
@@ -183,6 +184,7 @@ pipeline {
                         reportTitles: 'DEV Playwright Report'
                     ])
 
+                    // Publish DEV Playwright-HTML Report
                     publishHTML(target: [
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,

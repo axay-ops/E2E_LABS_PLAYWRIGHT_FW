@@ -1,7 +1,7 @@
 # ============================================
 # OPTION 1: FULLY AUTOMATED PIPELINE
 # ============================================
-# Flow: lint → dev → qa → stage → prod (automatic)
+# Flow: lint → dev → qa → stage → prod ->  (automatic)
 # Trigger: Push to develop/main branches, cron schedule
 # Reports: Published to GitHub Pages
 # ✅ ESLint static code analysis
@@ -683,7 +683,7 @@ jobs:
             </style>
           </head>
           <body>
-            <h1>🎭 Playwright Test Reports</h1>
+            <h1>🎭 Playwright Test Reports - E2E LABS</h1>
             <p class="timestamp">Last updated: ${CURRENT_DATE}</p>
 
             <div class="env-section" style="border-left: 4px solid #3498db;">
