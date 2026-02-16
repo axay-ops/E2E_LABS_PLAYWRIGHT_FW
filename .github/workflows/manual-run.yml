@@ -36,6 +36,16 @@ on:
           - Firefox
           - WebKit
 
+      test_type:
+        description: 'Select Test Suite'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - all 
+
 env:
   NODE_VERSION: '20'
 
@@ -83,7 +93,12 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run Tests
-        run: ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts --project="${{ github.event.inputs.browser }}"
+        run: |
+          if [ "${{ github.event.inputs.test_type }}" == "all" ]; then
+            ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts  --project="${{ github.event.inputs.browser }}"
+          else
+            ENV=${{ github.event.inputs.environment }} npx playwright test tests/loginpage.spec.ts --grep "@${{ github.event.inputs.test_type }}" --project="${{ github.event.inputs.browser }}"
+          fi
         env:
           DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
           CI: true

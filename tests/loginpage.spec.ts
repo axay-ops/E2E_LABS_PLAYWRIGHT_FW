@@ -10,7 +10,7 @@ test('Verify Successful login for Admin User', {tag: ['@smoke', '@regression', '
 });
 
 
-test.skip('Verify Successful login for Customer User', {tag: ['@smoke', '@UI']}, async ({CustomerhomePage})=> {
+test.skip('Verify Successful login for Customer User', {tag: ['@UI']}, async ({CustomerhomePage})=> {
         expect(await CustomerhomePage.getTitle()).toEqual(testData.homePageTitle);
 
 });
@@ -24,7 +24,7 @@ test1.skip('Verify Successful login for Admin User (via auth setup)', {tag: ['@s
 });
 
 
-test1 ('Verify Successful login for Customer User (via auth setup)', {tag: ['@smoke', '@regression', '@UI']}, async ({CustomerhomePage})=> {
+test1 ('Verify Successful login for Customer User (via auth setup)', {tag: ['@smoke', '@UI']}, async ({CustomerhomePage})=> {
 
         expect(await CustomerhomePage.isUserLoggedIn()).toBeTruthy();
         expect(await CustomerhomePage.getTitle()).toEqual(testData.homePageTitle);
@@ -53,7 +53,7 @@ test('Verify Invalid Login',
         expect(errormsg).toContain('Warning:');
 });
 
-test ('Login Page: Verify presence of all options on right side panel', {tag: ['@Smoke', '@UI']}, async ({page, baseURL})=> {
+test ('Login Page: Verify presence of all options on right side panel', {tag: ['@regression', '@UI']}, async ({page, baseURL})=> {
         test.setTimeout(60000); // timeout for this test
         const loginpage = new LoginPage(page); 
         await loginpage.navigateLoginPage(baseURL); 
