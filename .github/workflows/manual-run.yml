@@ -349,13 +349,6 @@ jobs:
                       "type": "section",
                       "text": {
                         "type": "mrkdwn",
-                        "text": "*Test Results by Environment:*\n${{ QA: ${{ needs.test.result }}"
-                      }
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
                         "text": "*📊 View Reports:*\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/|Test Reports Dashboard>"
                       }
                     },
