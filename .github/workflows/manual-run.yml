@@ -1,5 +1,5 @@
 # ============================================
-# OPTION 2: MANUAL SELECTION PIPELINE
+#             MANUAL SELECTION PIPELINE
 # ============================================
 # Select: Environment (dev/qa/stage/prod)
 # Select: Browser (matches your project names)
