@@ -116,12 +116,16 @@ pipeline {
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
                 echo '============================================'
-                // sh 'rm -rf allure-results playwright-report playwright-html-report test-results'
+                // sh 'rm -rf allure-results playwright-report playwright-html-report test-results allure-results-dev allure-results-qa allure-results-stage allure-results-prod'
                 bat '''
                     if exist allure-results rd /s /q allure-results
                     if exist playwright-report rd /s /q playwright-report
                     if exist playwright-html-report rd /s /q playwright-html-report
                     if exist test-results rd /s /q test-results
+                    if exist allure-results-dev rd /s /q allure-results-dev
+                    if exist allure-results-qa rd /s /q allure-results-qa
+                    if exist allure-results-stage rd /s /q allure-results-stage
+                    if exist allure-results-prod rd /s /q allure-results-prod
                 '''    
 
                 echo '============================================'
@@ -148,7 +152,7 @@ pipeline {
                     // Copy and generate DEV Allure Report
                     bat '''
                         if not exist allure-results-dev mkdir allure-results-dev
-                        robocopy allure-results allure-results-dev /E /IS /IT || exit 0
+                        robocopy allure-results allure-results-dev /E /IS /IT || exit /b0
                         npx allure generate allure-results-dev --clean -o allure-report-dev || exit 0
                     '''
 
