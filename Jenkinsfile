@@ -126,6 +126,7 @@ pipeline {
                     if exist allure-results-qa rd /s /q allure-results-qa
                     if exist allure-results-stage rd /s /q allure-results-stage
                     if exist allure-results-prod rd /s /q allure-results-prod
+                    if exist allure-results-combined rd /s /q allure-results-combined
                 '''    
 
                 echo '============================================'
