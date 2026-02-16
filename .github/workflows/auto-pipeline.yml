@@ -683,7 +683,7 @@ jobs:
             </style>
           </head>
           <body>
-            <h1>🎭 Playwright Test Reports - E2E LABS</h1>
+            <h1>🎭 Playwright Test Reports - Auto Run</h1>
             <p class="timestamp">Last updated: ${CURRENT_DATE}</p>
 
             <div class="env-section" style="border-left: 4px solid #3498db;">
