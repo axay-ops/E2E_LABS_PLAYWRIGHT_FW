@@ -320,7 +320,7 @@ jobs:
                       "type": "header",
                       "text": {
                         "type": "plain_text",
-                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Pipeline: ${{ steps.status.outputs.status_text }}",
+                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Manual Run: ${{ steps.status.outputs.status_text }}",
                         "emoji": true
                       }
                     },
@@ -344,6 +344,13 @@ jobs:
                           "text": "*Commit:*\n<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
                         }
                       ]
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Test Results:*\n${{ steps.status.outputs.qa_emoji }} ${{ github.event.inputs.environment }}: ${{ needs.test.result }}"
+                      }
                     },
                     {
                       "type": "section",
