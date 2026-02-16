@@ -438,16 +438,10 @@ pipeline {
                     # Create combined results directory
                     if not exist allure-results-combined mkdir allure-results-combined
                     
-                    # Copy all environment results
-                    # cp -r allure-results-dev/* allure-results-combined/ 2>/dev/null || true
-                    # cp -r allure-results-qa/* allure-results-combined/ 2>/dev/null || true
-                    # cp -r allure-results-stage/* allure-results-combined/ 2>/dev/null || true
-                    # cp -r allure-results-prod/* allure-results-combined/ 2>/dev/null || true
-
                     robocopy allure-results-dev allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     robocopy allure-results-qa allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     robocopy allure-results-stage allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
-                    # robocopy allure-results-prod allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
+                    robocopy allure-results-prod allure-results-combined /E /IS /IT /NP /R:0 /W:0 || exit 0
                     
                     # Create combined environment.properties
                     echo "Environment=ALL (DEV, QA, STAGE)">allure-results-combined/environment.properties
