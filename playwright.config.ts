@@ -20,7 +20,7 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
  
-  retries: process.env.CI ? 1 : 0,
+  retries: process.env.CI ? 0 : 0,
   workers: process.env.CI ? 1 : undefined,
   forbidOnly: !!process.env.CI,     //* Fail the build on CI if you accidentally left test.only in the source code. */
 

@@ -258,3 +258,123 @@ jobs:
           echo "   Allure:     https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/${ENV}/allure-report/index.html"
           echo ""
           echo "============================================"
+
+  # ============================================
+  # Slack & Email Notifications
+  # ============================================
+  notify:
+    name: 📬 Send Notifications
+    runs-on: ubuntu-latest
+    needs: [test, publish-reports]
+    if: always()
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      MAIL_SERVER: ${{ secrets.MAIL_SERVER }}
+      NOTIFICATION_EMAILS: ${{ secrets.NOTIFICATION_EMAILS }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      # ========== Determine Overall Status ==========
+      - name: 🔍 Determine Pipeline Status
+        id: status
+        run: |
+          # Check job results
+          QA_RESULT="${{ needs.test.result }}"
+
+          echo "QA: $QA_RESULT"
+
+          # Determine overall status
+          if [[ "$QA_RESULT" == "success" ]]; then
+            echo "overall_status=success" >> $GITHUB_OUTPUT
+            echo "status_emoji=✅" >> $GITHUB_OUTPUT
+            echo "status_color=#36a64f" >> $GITHUB_OUTPUT
+            echo "status_text=All Tests Passed" >> $GITHUB_OUTPUT
+          elif [[ "$QA_RESULT" == "failure" ]]; then
+            echo "overall_status=failure" >> $GITHUB_OUTPUT
+            echo "status_emoji=❌" >> $GITHUB_OUTPUT
+            echo "status_color=#dc3545" >> $GITHUB_OUTPUT
+            echo "status_text=Tests Failed" >> $GITHUB_OUTPUT
+          else
+            echo "overall_status=warning" >> $GITHUB_OUTPUT
+            echo "status_emoji=⚠️" >> $GITHUB_OUTPUT
+            echo "status_color=#ffc107" >> $GITHUB_OUTPUT
+            echo "status_text=Tests Partially Completed" >> $GITHUB_OUTPUT
+          fi
+
+          # Set individual status emojis
+          if [[ "$QA_RESULT" == "success" ]]; then echo "qa_emoji=✅" >> $GITHUB_OUTPUT; else echo "qa_emoji=❌" >> $GITHUB_OUTPUT; fi
+
+      # ========== Slack Notification ==========
+      - name: 💬 Send Slack Notification
+        id: slack
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        continue-on-error: true
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "${{ steps.status.outputs.status_color }}",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Pipeline: ${{ steps.status.outputs.status_text }}",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Repository:*\n${{ github.repository }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Branch:*\n${{ github.ref_name }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Triggered by:*\n${{ github.actor }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Commit:*\n<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Test Results by Environment:*\n${{ steps.status.outputs.dev_emoji }} DEV: ${{ needs.dev-tests.result }}\n${{ steps.status.outputs.qa_emoji }} QA: ${{ needs.qa-tests.result }}\n${{ steps.status.outputs.stage_emoji }} STAGE: ${{ needs.stage-tests.result }}\n${{ steps.status.outputs.prod_emoji }} PROD: ${{ needs.prod-tests.result }}"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*📊 View Reports:*\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/|Test Reports Dashboard>"
+                      }
+                    },
+                    {
+                      "type": "context",
+                      "elements": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "Workflow: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run #${{ github.run_number }}>"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
