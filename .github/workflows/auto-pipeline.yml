@@ -835,7 +835,7 @@ jobs:
                       "type": "header",
                       "text": {
                         "type": "plain_text",
-                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Pipeline: ${{ steps.status.outputs.status_text }}",
+                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Auto Pipeline: ${{ steps.status.outputs.status_text }}",
                         "emoji": true
                       }
                     },

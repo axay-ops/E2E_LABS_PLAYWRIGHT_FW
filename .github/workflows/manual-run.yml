@@ -320,7 +320,7 @@ jobs:
                       "type": "header",
                       "text": {
                         "type": "plain_text",
-                        "text": "${{ steps.status.outputs.status_emoji }} Manual Run:   ${{ steps.status.outputs.status_text }}",
+                        "text": "${{ steps.status.outputs.status_emoji }} Manual Trigger:   ${{ steps.status.outputs.status_text }}",
                         "emoji": true
                       }
                     },
@@ -432,7 +432,7 @@ jobs:
                     </tr>
                     <tr>
                       <td>🔍 QA</td>
-                      <td class="${{ needs.qa-tests.result == 'success' && 'success' || 'failure' }}">${{ needs.qa-tests.result }}</td>
+                      <td class="${{ needs.test.result == 'success' && 'success' || 'failure' }}">${{ needs.test.result }}</td>
                     </tr>
                   </table>
 
