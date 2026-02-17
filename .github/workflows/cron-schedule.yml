@@ -326,7 +326,7 @@ jobs:
                       "type": "section",
                       "text": {
                         "type": "mrkdwn",
-                        "text": "*📊 View Reports:*\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/eslint-report/index.html/|ESLint Report>\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-report/index.html/|Built-In HTML Report>\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-html-report/index.html/|Playwright HTML Report>\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/allure-report/index.html/|Allure Report>\n"
+                        "text": "*📊 View Reports:*\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/eslint-report/index.html|ESLint Report>\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-report/index.html|Built-In HTML Report>\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-html-report/index.html|Playwright HTML Report>\n<https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/allure-report/index.html|Allure Report>\n"
                       }
                     },
 
