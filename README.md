@@ -6,13 +6,17 @@ Welcome to the **E2E_LABS_PLAYWRIGHT_FW** automation project. Below you can find
 
 ## Workflow Status
 
-[![Playwright Tests](https://github.com/axay-ops/E2E_LABS_PLAYWRIGHT_FW/actions/workflows/playwright.yml/badge.svg)](https://github.com/axay-ops/E2E_LABS_PLAYWRIGHT_FW/actions/workflows/playwright.yml)
+[![Nightly Build](https://github.com/axay-ops/E2E_LABS_PLAYWRIGHT_FW/actions/workflows/cron-schedule.yml/badge.svg?branch=main&event=schedule)](https://github.com/axay-ops/E2E_LABS_PLAYWRIGHT_FW/actions/workflows/cron-schedule.yml)
+
+[![Manual Run](https://github.com/axay-ops/E2E_LABS_PLAYWRIGHT_FW/actions/workflows/manual-run.yml/badge.svg?branch=main)](https://github.com/axay-ops/E2E_LABS_PLAYWRIGHT_FW/actions/workflows/manual-run.yml)
 
 ---
 
 ## HTML Reports
 
 Click the badges below to view the latest reports published via GitHub Pages:
+
+[![ESLint-Report](https://img.shields.io/badge/Playwright-Report-yellow)](https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/eslint-report/index.html)
 
 [![Playwright-Report](https://img.shields.io/badge/Playwright-Report-blue)](https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-report/index.html)
 
