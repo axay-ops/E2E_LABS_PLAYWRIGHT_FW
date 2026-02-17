@@ -16,7 +16,7 @@ Welcome to the **E2E_LABS_PLAYWRIGHT_FW** automation project. Below you can find
 
 Click the badges below to view the latest reports published via GitHub Pages:
 
-[![ESLint-Report](https://img.shields.io/badge/Playwright-Report-yellow)](https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/eslint-report/index.html)
+[![ESLint-Report](https://img.shields.io/badge/ESLint-Report-yellow)](https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/eslint-report/index.html)
 
 [![Playwright-Report](https://img.shields.io/badge/Playwright-Report-blue)](https://axay-ops.github.io/E2E_LABS_PLAYWRIGHT_FW/playwright-report/index.html)
 
