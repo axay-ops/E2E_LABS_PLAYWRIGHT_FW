@@ -1,75 +1,48 @@
-import {test as base, expect} from '@playwright/test';
+import { test as base, expect} from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { STORAGE_STATE_PATH } from '../playwright.config';
-
-
-// const adminjsonFile = STORAGE_STATE_PATH('admin');
-// const customerjsonFile = STORAGE_STATE_PATH('customer');
-
-/* 
-    OPTION 1`:
-    This fixture doesnt use "auth setup". 
-    It returns the respective HomePage for Admin and Customer
-*/
 
 type customFixtures = {
     AdminhomePage: HomePage; 
     CustomerhomePage: HomePage;
 }
 
-export const test = base.extend<customFixtures>({
-    AdminhomePage:  async ({browser, baseURL}, use, testInfo) => {
-     const context = await browser.newContext({recordVideo: {dir: testInfo.outputPath('videos')}}); 
-     const mypage = await context.newPage();   
-     const loginPage = new LoginPage (mypage); 
+export const authTest  = base.extend<customFixtures>({
+    AdminhomePage:  async ({page, baseURL}, use, testInfo) => {  
+     const loginPage = new LoginPage (page); 
      await loginPage.navigateLoginPage(baseURL);
      const homePage = await loginPage.doLogin(testInfo.project.metadata.appAdminUsername, testInfo.project.metadata.appAdminPassword); 
      expect(await homePage.isUserLoggedIn()).toBeTruthy(); 
      await use(homePage);
-     await context.close();
-
-     // attach videos manually, since context is created manually (not by PW's page)
-    //  const videoPath = await mypage.video()?.path();
-    //  console.log(`Video saved in standard location: ${videoPath}`)
-    //   if (videoPath) {
-    //         await testInfo.attach('video', {
-    //         path: videoPath,
-    //         contentType: 'video/webm',
-    //     });
-    // }
+     await page.close();
     },
 
-    CustomerhomePage:  async ({browser, baseURL}, use, testInfo) => {
-     const context = await browser.newContext();
-     const mypage = await context.newPage();   
-     const loginPage = new LoginPage (mypage); 
+    CustomerhomePage:  async ({page, baseURL}, use, testInfo) => { 
+     const loginPage = new LoginPage (page); 
      await loginPage.navigateLoginPage(baseURL);
      const homePage = await loginPage.doLogin(testInfo.project.metadata.appCustomerUsername, testInfo.project.metadata.appCustomerPassword); 
      expect(await homePage.isUserLoggedIn()).toBeTruthy(); 
      await use(homePage);
-     await context.close();
+     await page.close();
     }
 });
 
-export {expect}; 
 
 
 /* 
-    OPTION 2:
+    OPTION :
     **    This Base fixture uses "auth setup", i.e. storage stage Json files. 
     **    It returns the respective Pages for Admin and Customer
 */
 
 type customFixtures1 = {
-    AdminhomePage: HomePage; 
-    CustomerhomePage: HomePage;
+    AdminhomePage_SS: HomePage; 
+    CustomerhomePage_SS: HomePage;
 }
 
-
-
-export const test1 = base.extend<customFixtures1>({
-    AdminhomePage: async ({browser, baseURL}, use, testInfo) => {
+export const authTest_storageState = base.extend<customFixtures1>({
+    AdminhomePage_SS: async ({browser, baseURL}, use, testInfo) => {
 
         const context = await browser.newContext(
                 {storageState: STORAGE_STATE_PATH('admin')!,
@@ -84,9 +57,19 @@ export const test1 = base.extend<customFixtures1>({
         const homepage = new HomePage (mypage);
         await use(homepage);
         await context.close();
+        
+        // attach videos manually, since context is created manually (not by PW's page object)
+            const videoPath = await mypage.video()?.path();
+            console.log(`Video saved in standard location: ${videoPath}`);
+                if (videoPath) {
+                await testInfo.attach('video', {
+                path: videoPath,
+                contentType: 'video/webm',
+            });
+          }
         },
 
-    CustomerhomePage: async ({browser, baseURL}, use, testInfo) => {
+    CustomerhomePage_SS: async ({browser, baseURL}, use, testInfo) => {
         const context = await browser.newContext(
                 {storageState: STORAGE_STATE_PATH('customer')!,
                  recordVideo: {dir: testInfo.outputPath('videos')}});
@@ -95,8 +78,17 @@ export const test1 = base.extend<customFixtures1>({
         const homepage = new HomePage (mypage);
         await use(homepage);
         await context.close();
+
+        // attach videos manually, since context is created manually (not by PW's page object)
+            const videoPath = await mypage.video()?.path();
+            console.log(`Video saved in standard location: ${videoPath}`);
+                if (videoPath) {
+                await testInfo.attach('video', {
+                path: videoPath,
+                contentType: 'video/webm',
+            });
+          }
         }
     }
-
 );
 

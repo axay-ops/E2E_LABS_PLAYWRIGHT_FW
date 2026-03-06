@@ -1,5 +1,5 @@
 //mport {test, expect} from '@playwright/test'
-import {test, expect} from '../fixtures/baseFixtures';
+import {test, expect} from '../fixtures/base.fixture';
 import { ResultsPage } from '../pages/ResultsPage';
 import { ProductsInfoPage } from '../pages/ProductsInfoPage';
 import { testData } from '../utils/dataLoader';
@@ -16,7 +16,7 @@ for (const product of testData.searchData) {
 test(`Verify Product Header and Images for Product ${product.productName}`, {tag: ['@smoke', '@UI']}, async ({AdminhomePage})=> {
            
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
-        expect(await AdminhomePage.getTitle()).toEqual('My Account');
+        expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);
 
         const resultspage: ResultsPage = await AdminhomePage.doSearch(product.searchKey); 
         expect(await resultspage.getProductsCount()).toBeGreaterThan(0);
@@ -33,7 +33,7 @@ for (const product of testData.ProductData) {
 test(`Verify Metadata for ${product.productName}`, {tag: ['@regression', '@UI']}, async ({AdminhomePage})=> {
        
         expect(await AdminhomePage.isUserLoggedIn()).toBeTruthy();
-        expect(await AdminhomePage.getTitle()).toEqual('My Account');
+        expect(await AdminhomePage.getTitle()).toEqual(testData.homePageTitle);
 
         const resultspage: ResultsPage = await AdminhomePage.doSearch(product.searchKey); 
         expect(await resultspage.getProductsCount()).toBeGreaterThan(0);

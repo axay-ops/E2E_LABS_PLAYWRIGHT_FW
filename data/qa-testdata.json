@@ -1,8 +1,8 @@
 {
   "homePageTitle": "My Account",
   "loginPageTitle": "Account Login",
-  "loginPageWarningmsg": "",
-  "loginPageWarningMsgLimits": "",
+  "loginPageWarningmsg": "Warning:",
+  "loginPageWarningMsgLimits": "Warning:",
   "loginPageRightPanelOptions": ["Login", "Register", "Forgotten Password", "My Account", "Address Book", "Wish List", "Order History", "Downloads", "Recurring payments",
                                   "Reward Points", "Returns", "Transactions","Newsletter"],
   "searchData": [
