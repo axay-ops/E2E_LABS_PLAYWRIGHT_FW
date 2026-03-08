@@ -1,0 +1,2 @@
+Page Title :My Account
+Video saved in standard location: /home/runner/work/E2E_LABS_PLAYWRIGHT_FW/E2E_LABS_PLAYWRIGHT_FW/test-results/loginpage-Verify-Successfu-b98ec-stomer-User-via-auth-setup--Google-Chrome/videos/ca47807ed6e579ad2fcd8e059816d221.webm

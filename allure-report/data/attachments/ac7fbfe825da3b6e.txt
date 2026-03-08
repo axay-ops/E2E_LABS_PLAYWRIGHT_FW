@@ -1,0 +1,3 @@
+Active Cookies: [ 'OCSESSID', 'language', 'currency' ]
+Page Title :My Account
+Video saved in standard location: /home/runner/work/E2E_LABS_PLAYWRIGHT_FW/E2E_LABS_PLAYWRIGHT_FW/test-results/loginpage-Verify-Successfu-b5caa--Admin-User-via-auth-setup--Google-Chrome/videos/056d12b86fac68221ae88f73738e1e6b.webm
