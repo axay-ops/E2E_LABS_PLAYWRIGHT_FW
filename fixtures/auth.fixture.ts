@@ -28,8 +28,6 @@ export const authTest  = base.extend<customFixtures>({
     }
 });
 
-
-
 /* 
     OPTION :
     **    This Base fixture uses "auth setup", i.e. storage stage Json files. 
