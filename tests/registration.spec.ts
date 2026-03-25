@@ -2,10 +2,10 @@
 import { test, expect} from '../fixtures/base.fixture';
 import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
-import { csvUserdata } from '../utils/dataLoader';
+import { csvBulkRegistrationData } from '../utils/dataLoader';
 
 
-for (const user of csvUserdata) {
+for (const user of csvBulkRegistrationData) {
 test (`Verify User Registration: "${user.firstName}"`, {tag: ['@regression', '@UI', '@registration']}, async ({page, baseURL}) => {
     const loginpage = new LoginPage (page);
     await loginpage.navigateLoginPage(baseURL);

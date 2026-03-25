@@ -29,7 +29,7 @@ export const authTest  = base.extend<customFixtures>({
 });
 
 /* 
-    OPTION :
+    OPTION 2:
     **    This Base fixture uses "auth setup", i.e. storage stage Json files. 
     **    It returns the respective Pages for Admin and Customer
 */
@@ -89,4 +89,23 @@ export const authTest_storageState = base.extend<customFixtures1>({
         }
     }
 );
+
+/*
+    Custom Fixture for Random Email
+*/
+
+type customFixtures2 = {
+     randomEmail: string;
+};
+
+// // @ts-expect-error: Playwright requires an object pattern even if no fixtures are used
+export const random_Email = base.extend<customFixtures2>({
+  randomEmail: async ({}, use) => {
+    const randomSuffix = Math.random().toString(36).substring(7);
+    const email = `auto-api_${randomSuffix}@akk.com`;
+    // Pass the generated email to the test
+    await use(email);
+  },
+});
+
 

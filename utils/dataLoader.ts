@@ -1,7 +1,7 @@
 import devData from '../data/dev-testdata.json' with { type: 'json' };
 import qaData from '../data/qa-testdata.json' with { type: 'json' };
 import stageData from '../data/stage-testdata.json' with { type: 'json' };
-import prodData from '../data/stage-testdata.json' with { type: 'json' };
+import prodData from '../data/prod-testdata.json' with { type: 'json' };
 
 import path from 'path';
 import fs from 'fs'; 
@@ -59,7 +59,7 @@ const csvfilecontent = fs.readFileSync(filePath, 'utf-8');
         skip_empty_lines: true 
         });
 
-export const csvUserdata = Userdata;
+export const csvBulkRegistrationData = Userdata;
 
 
 

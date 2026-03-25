@@ -7,7 +7,7 @@ export const dbTest = base.extend<{mongotest: MongoDbUtil }>({
     const mongo = new MongoDbUtil();
     await mongo.connect();
     if (await mongo.checkConnection()) {
-      console.log('Mongo Connection successfull')
+      console.log('Mongo Connection successfull');
     }
     await use(mongo);
     await mongo.disconnect();

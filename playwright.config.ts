@@ -6,6 +6,9 @@ import path from 'path';
 const ENV = process.env.ENV || 'qa';
 dotenvx.config({ path: path.resolve("", `.env.${ENV}`) });  // Load from .env files based on ENV
 
+export const apiURI: any = process.env.API_URL!;
+export const apiValidToken: any = process.env.API_TOKEN!;
+
 export const STORAGE_STATE_PATH = (role: string) => {
        return path.join("", `playwright/.auth/${ENV}-${role}.json`);  //set path for Storage state json files based on env. 
       }
@@ -14,7 +17,6 @@ export default defineConfig({
   
   globalTimeout: 5 * 60 * 1000,   // Entire run       - 0s (No limit) 
   timeout: 1 * 60 * 1000,         // Single Test run  - 30s
-
   expect: {timeout: 10000},       // WebAssertion     - 5s
   
   testDir: './tests',
