@@ -11,7 +11,6 @@ const headers = {
 const requestBody = {
             name: 'Ak Kumar',
             email: `aktest${Math.floor(100000 + Math.random() * 900000)}@mail.com`,
-            // email: {random_Email},
             gender: 'male',
             status: 'active'
     };

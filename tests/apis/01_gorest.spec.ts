@@ -30,11 +30,10 @@ console.log(responseBody);
 
 
 
-test('POST - Create User', {tag: ['@regression', '@API']}, async ({request, randomEmail})=> {
+test('POST - Create User', {tag: ['@regression', '@API']}, async ({request})=> {
     const requestBody = {
             name: 'Ak Kumar',
-            email: randomEmail,
-            // email: `aktest${Date.now()}@mail.com`,
+            email: `aktest${Date.now()}@mail.com`,
             // email: `aktest${Math.floor(100000 + Math.random() * 900000)}@mail.com`
             gender: 'male',
             status: 'active'

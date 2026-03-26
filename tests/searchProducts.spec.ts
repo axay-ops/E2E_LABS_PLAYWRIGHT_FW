@@ -13,11 +13,11 @@ import { testData } from '../utils/dataLoader';
 //         {key: 'dummy', results: 0},
 // ];
 
-for (const product of testData.searchData) {
-test(`Verify Search Product: ${product.key}`, {tag: ['@smoke', '@regression', '@UI', '@product']}, async ({AdminhomePage})=> {
-        const resultspage: ResultsPage = await AdminhomePage.doSearch(product.key); 
-        expect(await resultspage.getProductsCount()).toBe(product.results);
-});       
+for (const product of testData.ProductData) {
+test(`Verify Search Product: ${product.searchKey}`, {tag: ['@smoke', '@regression', '@UI', '@product']}, async ({AdminhomePage})=> {
+        const resultspage: ResultsPage = await AdminhomePage.doSearch(product.searchKey);
+        expect(await resultspage.getProductsCount()).toBe(product.ResultCount);
+});
 }
 
 
