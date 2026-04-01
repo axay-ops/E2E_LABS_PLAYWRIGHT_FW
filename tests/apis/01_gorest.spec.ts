@@ -4,7 +4,7 @@ import {APIResponse} from '@playwright/test';
 
 //const valid_token = 'ak-token';
 
-test('GET All Users', {tag: ['@smoke', '@API']}, async ({request})=> {
+test('GET All Users', {tag: ['@smoke', '@api']}, async ({request})=> {
 const response: APIResponse = await request.get(`${apiURI}/users`, {
     headers: {
         Authorization: `Bearer ${apiValidToken}`
@@ -13,11 +13,13 @@ const response: APIResponse = await request.get(`${apiURI}/users`, {
 expect(response.status()).toBe(200);
 const responseBody = await response.json();
 console.log(responseBody);
+console.log('-----------------------');
+console.log(JSON.stringify(responseBody, null, 2));
 
 });
 
 
-test('GET Single User', {tag: ['@smoke', '@API']}, async ({request})=> {
+test('GET Single User', {tag: ['@smoke', '@api']}, async ({request})=> {
 const response: APIResponse = await request.get(`${apiURI}/users/1010`, {
     headers: {
         Authorization: `Bearer ${apiValidToken}`
@@ -30,7 +32,7 @@ console.log(responseBody);
 
 
 
-test('POST - Create User', {tag: ['@regression', '@API']}, async ({request})=> {
+test('POST - Create User', {tag: ['@regression', '@api']}, async ({request})=> {
     const requestBody = {
             name: 'Ak Kumar',
             email: `aktest${Date.now()}@mail.com`,

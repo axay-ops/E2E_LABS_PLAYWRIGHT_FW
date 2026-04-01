@@ -37,7 +37,16 @@ export default defineConfig({
     video: 'on',
     baseURL: process.env.BASE_URL!,
     headless: process.env.CI ? true : (process.env.HEADLESS === 'true'),  // headless: !!process.env.CI,  false locally, true in CI
-  },
+
+    httpCredentials: {
+      'username': 'admin',
+      'password': 'admin'
+    },
+
+    extraHTTPHeaders: {
+      
+    }
+    },
 
   reporter: [
     ['html', {open: 'never'}],
@@ -68,7 +77,10 @@ export default defineConfig({
     appAdminUsername:  process.env.ADMIN_USER,    //  this metadata will be accessible in test/fixtures/auth via testInfo.project.metadata.appUsername */ 
     appAdminPassword:  process.env.ADMIN_PASSWORD,
     appCustomerUsername: process.env.CUSTOMER_USER, 
-    appCustomerPassword: process.env.CUSTOMER_PASSWORD, 
+    appCustomerPassword: process.env.CUSTOMER_PASSWORD,
+    spotifyClientId:  process.env.SPOTIFY_CLIENTID,
+    spotifyClientSecret:  process.env.SPOTIFY_CLIENTSECRET,
+    spotifyGrantType: process.env.SPOTIFY_GRANTTYPE
     },
 
   /* Configure projects for major browsers

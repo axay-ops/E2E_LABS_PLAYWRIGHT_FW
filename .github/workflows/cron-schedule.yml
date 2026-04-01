@@ -96,7 +96,7 @@ jobs:
 
       # 5️⃣ Run Playwright Tests
       - name: 🧪 Run Playwright Tests
-        run: ENV=qa npx playwright test tests/loginpage.spec.ts
+        run: ENV=qa npx playwright test --grep "loginpage|@api"
         env:
           DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
 

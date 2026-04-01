@@ -118,9 +118,9 @@ test.describe('MongoDB API Tests', () => {
 
     // Insert multiple test documents
     const testUsers = [
-      { name: 'User 1', email: `user1_${Date.now()}@example.com`, age: 25, status: 'active' },
-      { name: 'User 2', email: `user2_${Date.now()}@example.com`, age: 30, status: 'active' },
-      { name: 'User 3', email: `user3_${Date.now()}@example.com`, age: 35, status: 'inactive' }
+      { name: 'User 1', email: `user1_${Date.now()}@example.com`, age: 25, status: 'active', createdAt: new Date(), updatedAt: new Date() },
+      { name: 'User 2', email: `user2_${Date.now()}@example.com`, age: 30, status: 'active', createdAt: new Date(), updatedAt: new Date() },
+      { name: 'User 3', email: `user3_${Date.now()}@example.com`, age: 35, status: 'inactive', createdAt: new Date(), updatedAt: new Date() }
     ];
     const insertResult = await collection.insertMany(testUsers);
 
@@ -153,7 +153,9 @@ test.describe('MongoDB API Tests', () => {
     const testUser = {
       name: 'Count Test User',
       email: `counttest_${Date.now()}@example.com`,
-      status: 'active'
+      status: 'active', 
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
     const insertResult = await collection.insertOne(testUser);
 

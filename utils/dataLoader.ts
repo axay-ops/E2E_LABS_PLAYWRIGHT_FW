@@ -2,14 +2,16 @@ import devData from '../data/dev-testdata.json' with { type: 'json' };
 import qaData from '../data/qa-testdata.json' with { type: 'json' };
 import stageData from '../data/stage-testdata.json' with { type: 'json' };
 import prodData from '../data/prod-testdata.json' with { type: 'json' };
+import GetUsersAPISchema from '../schemas/gorest_GetUsers_schema.json' with {type: 'json'}; 
 
 import path from 'path';
 import fs from 'fs'; 
 import {parse} from 'csv-parse/sync'; 
-// import { fileURLToPath } from 'url';
+
+import Ajv from 'ajv';
 
 const testenv = process.env.ENV || 'qa';
-let data: any;  // eslint-disable-line @typescript-eslint/no-explicit-any
+let data: any;              // eslint-disable-line @typescript-eslint/no-explicit-any
 
 switch (testenv) {
         case 'qa':
@@ -37,35 +39,50 @@ export const testData = data;
 ****************************************************************/
 
 // schema/type of registration data
-type registrationUserData = {
-    firstName: string,
-    lastName: string,
-    telephone: string, 
-    password: string, 
-    SubscribeNewsletter: string
-};
+        type registrationUserData = {
+        firstName: string,
+        lastName: string,
+        telephone: string, 
+        password: string, 
+        SubscribeNewsletter: string
+        };
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-
-const filePath = path.join(process.cwd(), 'data/bulk-registrationdata.csv');
-
-//const filePath = path.join(__dirname, '../data/bulk-registrationdata.csv');
-const csvfilecontent = fs.readFileSync(filePath, 'utf-8');
+        const csvfilecontent = fs.readFileSync(path.resolve('./data/bulk-registrationdata.csv'), 'utf-8');
 
         const Userdata: registrationUserData[]  = parse(csvfilecontent, {
         columns: true,
         skip_empty_lines: true 
         });
 
-export const csvBulkRegistrationData = Userdata;
+        export const csvBulkRegistrationData = Userdata;
+
+
+/***************************************************************** 
+                * API Schema loader
+****************************************************************/
+
+        const ajv =  new Ajv ();
+        export const compiledGorestGetUsers =  ajv.compile(GetUsersAPISchema);  // returns compiled validation function
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 // export const testData = `${testenv}Data`;
-
 
 /* 
 

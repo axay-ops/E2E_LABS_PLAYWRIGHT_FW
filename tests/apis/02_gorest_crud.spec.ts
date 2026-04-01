@@ -16,7 +16,7 @@ const requestBody = {
     };
 
 
-test('POST - Create User', {tag: ['@regression', '@API']}, async ({request})=> {
+test('POST - Create User', {tag: ['@regression', '@api']}, async ({request})=> {
 
     const response: APIResponse = await request.post(`${apiURI}/users`, {
     headers, 
@@ -29,7 +29,7 @@ console.log(responseBody);
 });    
 
 
-test('PATCH - partial update User', {tag: ['@API']}, async ({request})=> {
+test('PATCH - partial update User', {tag: ['@api']}, async ({request})=> {
 
     const userid = 1020;
     const reqBody = {
@@ -47,7 +47,7 @@ console.log(responseBody);
 });    
 
 
-test('DELETE - delete User', {tag: ['@API']}, async ({request})=> {
+test('DELETE - delete User', {tag: ['@api']}, async ({request})=> {
 
     const userid = 1002;
 

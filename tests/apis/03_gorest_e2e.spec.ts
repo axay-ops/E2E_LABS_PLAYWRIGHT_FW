@@ -7,7 +7,7 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
-test('E2E - API Crud operations', {tag: ['@regression', '@API']}, async ({request, randomEmail})=> {
+test('E2E - API Crud operations', {tag: ['@regression', '@api']}, async ({request, randomEmail})=> {
     const requestBody = {
             name: 'Ak Kumar',
             email: randomEmail,

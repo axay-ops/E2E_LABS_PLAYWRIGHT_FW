@@ -2,8 +2,9 @@ import { test as base} from '@playwright/test';
 import { MongoDbUtil } from '../utils/mongodbUtil';
 
 // // @ts-expect-error: Playwright requires an object pattern even if no fixtures are used
+
 export const dbTest = base.extend<{mongotest: MongoDbUtil }>({
-  mongotest: async ({}, use) => {
+  mongotest: async ({/* eslint-disable-line no-empty-pattern */}, use) => {
     const mongo = new MongoDbUtil();
     await mongo.connect();
     if (await mongo.checkConnection()) {
