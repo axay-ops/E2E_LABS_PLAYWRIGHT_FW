@@ -40,11 +40,11 @@ export const testData = data;
 
 // schema/type of registration data
         type registrationUserData = {
-        firstName: string,
-        lastName: string,
-        telephone: string, 
-        password: string, 
-        SubscribeNewsletter: string
+                firstName: string,
+                lastName: string,
+                telephone: string, 
+                password: string, 
+                SubscribeNewsletter: string
         };
 
         const csvfilecontent = fs.readFileSync(path.resolve('./data/bulk-registrationdata.csv'), 'utf-8');

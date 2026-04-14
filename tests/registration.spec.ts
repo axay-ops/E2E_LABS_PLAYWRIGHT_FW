@@ -19,7 +19,7 @@ test (`Verify User Registration: "${user.firstName}"`, {tag: ['@regression', '@U
         user.SubscribeNewsletter);
     expect(userregister).toBeTruthy(); 
 });
-}
+} 
 
 async function getrandomEmail() {
     const randomvalue = Math.random().toString(36).substring(2,9);

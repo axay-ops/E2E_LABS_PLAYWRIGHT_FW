@@ -1,4 +1,4 @@
-import { test as base, expect} from '@playwright/test';
+import { test as base} from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { STORAGE_STATE_PATH } from '../playwright.config';
@@ -101,7 +101,7 @@ type customFixtures2 = {
 // // @ts-expect-error: Playwright requires an object pattern even if no fixtures are used
 export const random_Email = base.extend<customFixtures2>({
   randomEmail: async ({/* eslint-disable-line no-empty-pattern */}, use) => {
-    const randomSuffix = Math.random().toString(36).substring(7);
+    const randomSuffix = Math.random().toString(36).substring(2,9);
     const email = `auto-api_${randomSuffix}@akk.com`;
     // Pass the generated email to the test
     await use(email);

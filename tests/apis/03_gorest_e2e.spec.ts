@@ -8,6 +8,7 @@ const headers = {
 };
 
 test('E2E - API Crud operations', {tag: ['@regression', '@api']}, async ({request, randomEmail})=> {
+    
     const requestBody = {
             name: 'Ak Kumar',
             email: randomEmail,
