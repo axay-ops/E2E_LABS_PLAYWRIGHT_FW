@@ -195,7 +195,7 @@ test.describe('FakeStore API - Products JSONPath Validation', () => {
 
         console.log(`High-rated products (>=4.0): ${highRatedProducts.length}`);
 
-        highRatedProducts.forEach((product: any) => {
+        highRatedProducts.forEach((product: { title: string; rating: { rate: number } }) => {
             console.log(`${product.title} - Rating: ${product.rating.rate}`);
             expect(product.rating.rate).toBeGreaterThanOrEqual(4.0);
         });
@@ -271,7 +271,7 @@ test.describe('FakeStore API - Products JSONPath Validation', () => {
 
         console.log(`Expensive electronics found: ${expensiveElectronics.length}`);
 
-        expensiveElectronics.forEach((product: any) => {
+        expensiveElectronics.forEach((product: { title: string; price: number; category: string; rating: { rate: number } }) => {
             console.log(`${product.title} - $${product.price} - Rating: ${product.rating.rate}`);
             expect(product.category).toBe('electronics');
             expect(product.price).toBeGreaterThan(100);
