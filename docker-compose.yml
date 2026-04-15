@@ -1,0 +1,21 @@
+services:
+  playwright-tests:
+    image: e2e-playwright-tests:latest  # Use same image name as docker build
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: e2e-playwright-tests
+    volumes:
+      # Mount test results and reports for viewing on host
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+    env_file:
+      - .env.keys  # Load decryption keys from .env.keys
+    environment:
+      # Test environment (qa, stage, prod, dev)
+      - ENV=${ENV:-qa}
+      - CI=true
+    # Override default command if needed
+    command: npx playwright test ./tests/loginpage.spec.ts

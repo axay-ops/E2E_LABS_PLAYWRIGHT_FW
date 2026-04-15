@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+npm-debug.log
+
+# Test results and reports
+test-results/
+playwright-report/
+playwright-html-report/
+allure-results/
+allure-report/
+eslint-report/
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Environment files (sensitive data)
+.env.keys
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI/CD
+Jenkinsfile
+.gitlab-ci.yml
+
+# Documentation
+README.md
+*.md
+!package.json
+
+# Playwright cache
+playwright/.cache/
+
+# Misc
+*.log
+.eslintcache

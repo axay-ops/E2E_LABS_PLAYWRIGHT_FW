@@ -31,3 +31,24 @@ async function getrandomEmail() {
 };
 
 */
+
+import { test} from '@playwright/test';
+
+// entire file runs in serial mode
+test.describe.configure({ mode: 'serial' });
+
+
+test.describe('Shopping Cart Flow', () => {
+        // This hook only runs for tests in this block
+            test.beforeEach(async ({ page }) => {
+                await page.goto('/cart');
+            });
+
+    // On this block runs in serial mode
+    test.describe.configure({ mode: 'serial' });
+
+    test('add item to cart', async ({ page }) => { /* ... */ });
+
+    test('remove item from cart', async ({ page }) => { /* ... */ });
+});
+

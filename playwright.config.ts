@@ -2,9 +2,15 @@ import { defineConfig, devices } from '@playwright/test';
 import dotenvx from '@dotenvx/dotenvx'
 import path from 'path';
 
+/*    ENV=qa is set
+      dotenvx.config() loads .env.qa
+      dotenvx automatically looks for DOTENV_PRIVATE_KEY_QA in the environment
+      It uses that key to decrypt the encrypted values in .env.qa
+*/
 
 const ENV = process.env.ENV || 'qa';
 dotenvx.config({ path: path.resolve("", `.env.${ENV}`) });  // Load from .env files based on ENV
+
 
 export const apiURI: any = process.env.API_URL!;
 export const apiValidToken: any = process.env.API_TOKEN!;
@@ -90,22 +96,38 @@ export default defineConfig({
   projects: [
     { name: 'setup', testMatch: /.*\.setup\.ts/  },
     {
-      name: 'Google Chrome',
-      use: {channel: 'chrome',
+      name: 'chromium',
+      use: {
+            browserName: 'chromium',  // Use Chromium (works in Docker)
             viewport: null,
             launchOptions: {
                 args: ['--start-maximized'],
                 ignoreDefaultArgs: ['--window-size=1280, 720']
               },
            },
-     dependencies: ['setup']     
+     dependencies: ['setup']
+    },
+
+    {
+      name: 'Google Chrome',
+      use: { 
+        channel: 'chrome', 
+        viewport: null,
+        launchOptions: {
+                args: ['--start-maximized'],
+                ignoreDefaultArgs: ['--window-size=1280, 720']
+              }
+       },
+       dependencies: ['setup'] 
     },
     
+
     // {
     //   name: 'Microsoft Edge',
-    //   use: { channel: 'msedge', 
-    //     viewport: null,
-    //         launchOptions: {
+    //   use: { 
+    //      channel: 'msedge', 
+    //      viewport: null,
+    //      launchOptions: {
     //             args: ['--start-maximized'],
     //             ignoreDefaultArgs: ['--window-size=1280, 720']
     //           }
@@ -114,20 +136,9 @@ export default defineConfig({
     // },
 
     // {
-    //   name: 'chromium',
-    //   use: { browserName: 'chromium', 
-    //     viewport: {width: 1920, height: 1080},
-    //         launchOptions: {
-    //             args: [],
-    //             ignoreDefaultArgs: ['--window-size=1280, 720']
-    //           }
-    //    },
-    //   dependencies: ['setup'] 
-    // },
-
-    // {
     //   name: 'webkit',
-    //   use: { browserName : 'webkit', 
+    //   use: { 
+    //         browserName : 'webkit', 
     //         viewport: null,
     //         launchOptions: {
     //           args: [],
