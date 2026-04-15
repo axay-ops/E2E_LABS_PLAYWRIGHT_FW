@@ -47,8 +47,8 @@ test.describe('Shopping Cart Flow', () => {
     // On this block runs in serial mode
     test.describe.configure({ mode: 'serial' });
 
-    test('add item to cart', async ({ page }) => { /* ... */ });
+    test('add item to cart', async ({ page }) => { await page.goto('/cart'); });
 
-    test('remove item from cart', async ({ page }) => { /* ... */ });
+    test('remove item from cart', async ({ page }) => { await page.goto('/cart');});
 });
 
