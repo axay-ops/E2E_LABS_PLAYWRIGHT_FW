@@ -1,11 +1,12 @@
 # Docker Setup Guide
 
-This guide explains how to build, run, and publish your Playwright testing framework as a Docker image.
+This guide explains how to build, run, publish, and use your Playwright testing framework as a Docker image, both locally and in CI/CD pipelines like GitHub Actions.
 
 ## Prerequisites
 
 1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 2. Docker Hub account (sign up at [hub.docker.com](https://hub.docker.com))
+3. GitHub repository with Actions enabled (for CI/CD integration)
 
 ## Building the Docker Image
 
@@ -30,19 +31,19 @@ docker build -t e2e-playwright-tests:1.0.0 .
 # Run specific test file
 docker run --rm \
   -e ENV=qa \
-  -e DOTENV_PRIVATE_KEY_QA=75a68e4da6759940be169532f3e2f956db52dd5c1799625064655a2bab617e39 \
+  -e DOTENV_PRIVATE_KEY_QA=XXX \
   e2e-playwright-tests npx playwright test ./tests/loginpage.spec.ts
 
 # Run specific test suite
 docker run --rm \
   -e ENV=qa \
-  -e DOTENV_PRIVATE_KEY_QA=75a68e4da6759940be169532f3e2f956db52dd5c1799625064655a2bab617e39 \
+  -e DOTENV_PRIVATE_KEY_QA=XXX \
   e2e-playwright-tests npm run test:qa
 
 # Run and mount results directory to view reports
 docker run --rm \
   -e ENV=qa \
-  -e DOTENV_PRIVATE_KEY_QA=75a68e4da6759940be169532f3e2f956db52dd5c1799625064655a2bab617e39 \
+  -e DOTENV_PRIVATE_KEY_QA=XXX \
   -v "$(pwd)/test-results:/app/test-results" \
   e2e-playwright-tests
 ```
@@ -176,36 +177,108 @@ npm run allure:open
 
 For CI/CD, pass decryption keys as environment variables instead of mounting files.
 
-### GitHub Actions Example
+### GitHub Actions Setup
+
+This project includes a pre-configured workflow at [`.github/workflows/docker-tests.yml`](.github/workflows/docker-tests.yml).
+
+#### Step 1: Update Docker Image Name
+
+Edit the workflow file line 51:
 
 ```yaml
-name: E2E Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Pull and run tests
-        env:
-          # Store these in GitHub Secrets
-          DOTENV_PRIVATE_KEY_QA: ${{ secrets.DOTENV_PRIVATE_KEY_QA }}
-          DOTENV_PRIVATE_KEY_PROD: ${{ secrets.DOTENV_PRIVATE_KEY_PROD }}
-        run: |
-          docker pull yourusername/e2e-playwright-tests:latest
-          docker run --rm \
-            -e ENV=qa \
-            -e DOTENV_PRIVATE_KEY_QA \
-            yourusername/e2e-playwright-tests:latest
+env:
+  DOCKER_IMAGE: yourusername/e2e-playwright-tests  # ← Change to your Docker Hub username
 ```
 
-**Setting up GitHub Secrets:**
-1. Go to your repo → Settings → Secrets and variables → Actions
-2. Add secrets:
-   - `DOTENV_PRIVATE_KEY_QA` = `75a68e4da6759940be169532f3e2f956db52dd5c1799625064655a2bab617e39`
-   - `DOTENV_PRIVATE_KEY_PROD` = (value from .env.keys)
-   - etc. for each environment
+#### Step 2: Set Up GitHub Secrets
+
+Go to your repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+
+**Required Secrets (for encrypted .env files):**
+
+| Secret Name | Value | Where to find |
+|------------|-------|---------------|
+| `DOTENV_PRIVATE_KEY_QA` | Copy from `.env.keys` | Line 11 in `.env.keys` |
+| `DOTENV_PRIVATE_KEY_STAGE` | Copy from `.env.keys` | Line 14 in `.env.keys` |
+| `DOTENV_PRIVATE_KEY_PROD` | Copy from `.env.keys` | Line 20 in `.env.keys` |
+| `DOTENV_PRIVATE_KEY_DEV` | Copy from `.env.keys` | Line 17 in `.env.keys` |
+
+**Optional Secrets (for private Docker images):**
+
+| Secret Name | Value | Purpose |
+|------------|-------|---------|
+| `DOCKER_HUB_USERNAME` | Your Docker Hub username | To pull private images |
+| `DOCKER_HUB_TOKEN` | Your Docker Hub access token | Authentication |
+
+To get Docker Hub token: Docker Hub → Account Settings → Security → New Access Token
+
+**Optional Secrets (for Slack notifications):**
+- `SLACK_WEBHOOK_URL` - Get from [Slack Apps](https://api.slack.com/messaging/webhooks)
+
+**Optional Secrets (for Email notifications):**
+- `MAIL_SERVER`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM`, `NOTIFICATION_EMAILS`
+
+#### Step 3: Run the Workflow
+
+**Manual Trigger:**
+1. Go to **Actions** tab → **Docker Tests** workflow → **Run workflow**
+2. Select parameters:
+   - **Environment**: qa, stage, prod, dev
+   - **Test Suite**: smoke, regression, all, specific
+   - **Docker Image Tag**: latest (or specific version)
+   - **Test File**: (only if "specific" selected)
+
+**Automatic Triggers:**
+- On push to `main` branch (when `tests/` or workflow file changes)
+- On pull request to `main`
+- Scheduled daily at 3 AM UTC
+
+#### Step 4: View Reports
+
+Enable GitHub Pages: **Settings** → **Pages** → Source: **gh-pages** branch
+
+Access reports at:
+```
+https://[YOUR-USERNAME].github.io/[REPO-NAME]/playwright-report/
+https://[YOUR-USERNAME].github.io/[REPO-NAME]/allure-report/
+```
+
+#### Workflow Features
+
+**Benefits vs. regular GitHub Actions:**
+
+| Feature | Regular Actions | Docker-Based |
+|---------|----------------|--------------|
+| **Setup time** | 2-3 minutes (install deps) | 10-20 seconds (pull image) |
+| **Consistency** | May vary per runner | Identical to local |
+| **Debugging** | Hard to reproduce | Run same image locally |
+| **Caching** | Manual cache management | Built into image |
+
+#### Updating Docker Image for CI/CD
+
+```bash
+# 1. Rebuild locally
+docker build -t yourusername/e2e-playwright-tests:latest .
+
+# 2. Test locally
+docker-compose up --build
+
+# 3. Push to Docker Hub
+docker push yourusername/e2e-playwright-tests:latest
+
+# 4. GitHub Actions automatically uses the new image on next run
+```
+
+**Versioning Strategy:**
+```bash
+# Tag with version number
+docker build -t yourusername/e2e-playwright-tests:v1.2.0 .
+docker push yourusername/e2e-playwright-tests:v1.2.0
+
+# Also tag as latest
+docker tag yourusername/e2e-playwright-tests:v1.2.0 yourusername/e2e-playwright-tests:latest
+docker push yourusername/e2e-playwright-tests:latest
+```
 
 ### Jenkins Example
 
@@ -263,6 +336,20 @@ docker run --rm --user $(id -u):$(id -g) e2e-playwright-tests
 - The base image includes browsers, but if you face issues:
 - Ensure you're using the correct Playwright image version matching your package.json
 
+### GitHub Actions Issues
+
+**Issue: "Pull access denied"**
+- Solution: Image is private. Add `DOCKER_HUB_USERNAME` and `DOCKER_HUB_TOKEN` secrets
+
+**Issue: "could not decrypt ADMIN_PASSWORD"**
+- Solution: Missing decryption key. Add `DOTENV_PRIVATE_KEY_QA` (or appropriate environment) to GitHub Secrets
+
+**Issue: "Reports not found"**
+- Solution: Check volume mounts, verify tests ran (check logs), ensure GitHub Pages is enabled
+
+**Issue: "No notification received"**
+- Solution: Verify `SLACK_WEBHOOK_URL` or email secrets (`MAIL_SERVER`, `MAIL_PORT`, etc.) are set correctly
+
 ## Image Size Optimization (Optional)
 
 To reduce image size:
@@ -272,3 +359,5 @@ To reduce image size:
 3. Use `.dockerignore` to exclude files (already configured)
 
 Current image is based on `mcr.microsoft.com/playwright` which includes all necessary browser dependencies.
+
+

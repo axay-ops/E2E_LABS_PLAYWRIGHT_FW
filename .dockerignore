@@ -13,7 +13,6 @@ eslint-report/
 # Git
 .git/
 .gitignore
-.github/
 
 # Environment files (sensitive data)
 .env.keys
@@ -31,7 +30,11 @@ Thumbs.db
 
 # CI/CD
 Jenkinsfile
-.gitlab-ci.yml
+.github/
+.dockerignore
+Dockerfile
+docker-compose.yml
+
 
 # Documentation
 README.md

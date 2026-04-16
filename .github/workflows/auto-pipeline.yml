@@ -25,10 +25,6 @@
 name: Auto Pipeline
 
 on:
-  # Scheduled runs (cron job)
-  # schedule:
-  #   - cron: '0 0 2 1/1 * ? *'  # Everyday 2 AM
-
   workflow_dispatch:
   push:
     branches: [main1, develop]
