@@ -59,7 +59,7 @@ on:
     - cron: '0 3 * * *'  # Daily at 3 AM UTC
 
 env:
-  # 🔄 UPDATE THIS: Replace with your Docker Hub username/image
+  # 🔄 Docker Hub username/image
   DOCKER_IMAGE: axayhub/e2e-labs-playwright-fw-hubrepo
   NODE_VERSION: '20'
 
