@@ -28,6 +28,23 @@ on:
       - 'utils/**'
       - '!.env.keys'
 
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Dockerfile'
+      - 'package*.json'
+      - 'playwright.config.ts'
+      - 'tests/**'
+      - 'lib/**'
+      - 'pages/**'
+      - '.env.*'
+      - 'data/**'
+      - 'fixtures/**'
+      - 'schemas/**'
+      - 'utils/**'
+      - '!.env.keys'
+
   workflow_dispatch:
     inputs:
       tag:
@@ -83,8 +100,9 @@ jobs:
       - name: 🔧 Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 3️⃣ Login to Docker Hub
+      # 3️⃣ Login to Docker Hub (only for push to main, not PRs)
       - name: 🔐 Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -108,7 +126,8 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: true
+          # Push to Docker Hub only on push to main, not on PRs
+          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.DOCKER_IMAGE }}:latest
             ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
@@ -121,18 +140,26 @@ jobs:
       - name: 📋 Image Details
         run: |
           echo "============================================"
-          echo "🐳 Docker Image Successfully Built & Pushed!"
-          echo "============================================"
-          echo "Repository: ${{ env.DOCKER_IMAGE }}"
-          echo "Tags:"
-          echo "  - latest"
-          echo "  - ${{ github.sha }}"
-          [ -n "${{ github.event.inputs.tag }}" ] && echo "  - ${{ github.event.inputs.tag }}" || true
-          echo "============================================"
-          echo "📦 Pull command:"
-          echo "docker pull ${{ env.DOCKER_IMAGE }}:latest"
-          echo "============================================"
-          echo "🔗 Docker Hub: https://hub.docker.com/r/${{ env.DOCKER_IMAGE }}"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "✅ Docker Image Successfully Built (PR Validation)"
+            echo "============================================"
+            echo "Event: Pull Request #${{ github.event.pull_request.number }}"
+            echo "Status: Build validation passed"
+            echo "Note: Image NOT pushed to Docker Hub (PR builds are for validation only)"
+          else
+            echo "🐳 Docker Image Successfully Built & Pushed!"
+            echo "============================================"
+            echo "Repository: ${{ env.DOCKER_IMAGE }}"
+            echo "Tags:"
+            echo "  - latest"
+            echo "  - ${{ github.sha }}"
+            [ -n "${{ github.event.inputs.tag }}" ] && echo "  - ${{ github.event.inputs.tag }}" || true
+            echo "============================================"
+            echo "📦 Pull command:"
+            echo "docker pull ${{ env.DOCKER_IMAGE }}:latest"
+            echo "============================================"
+            echo "🔗 Docker Hub: https://hub.docker.com/r/${{ env.DOCKER_IMAGE }}"
+          fi
           echo "============================================"
 
   # ============================================
@@ -145,6 +172,7 @@ jobs:
     # Trigger tests if:
     # 1. Push event to main (auto-trigger)
     # 2. Manual dispatch with trigger_tests=true
+    # 3. NOT on pull requests (PRs only validate build, don't run full tests)
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.trigger_tests == 'true')

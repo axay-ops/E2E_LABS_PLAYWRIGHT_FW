@@ -16,7 +16,7 @@ test('Verify Successful login for Customer User', {tag: ['@regression','@UI']}, 
 });
 
 
- // AUTH SETUP setup
+ // AUTH SETUP
 test('Verify Successful login for Admin User (via auth setup)', {tag: ['@smoke', '@UI']}, async ({AdminhomePage_SS})=> {
 
         expect(await AdminhomePage_SS.isUserLoggedIn()).toBeTruthy();
