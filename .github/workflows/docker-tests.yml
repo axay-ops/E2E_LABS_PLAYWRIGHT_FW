@@ -94,86 +94,84 @@ jobs:
       - name: 🧪 Run Tests - Smoke
         if: ${{ github.event.inputs.test_suite == 'smoke' || github.event_name == 'schedule' }}
         run: |
-          docker run --rm \
+          docker run --rm --name pw-test-run \
             -e ENV=${{ github.event.inputs.environment || 'qa' }} \
             -e CI=true \
             -e DOTENV_PRIVATE_KEY_QA=${{ secrets.DOTENV_PRIVATE_KEY_QA }} \
             -e DOTENV_PRIVATE_KEY_STAGE=${{ secrets.DOTENV_PRIVATE_KEY_STAGE }} \
             -e DOTENV_PRIVATE_KEY_PROD=${{ secrets.DOTENV_PRIVATE_KEY_PROD }} \
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
-            -v ${{ github.workspace }}/test-results:/app/test-results \
-            -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
-            -v ${{ github.workspace }}/playwright-html-report:/app/playwright-html-report \
-            -v ${{ github.workspace }}/allure-results:/app/allure-results \
+            -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            npx playwright test --grep '@smoke'
+            bash -c "npx playwright test --grep '@smoke' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 5️⃣ Run tests - Regression
       - name: 🧪 Run Tests - Regression
         if: ${{ github.event.inputs.test_suite == 'regression' }}
         run: |
-          docker run --rm \
+          docker run --rm --name pw-test-run \
             -e ENV=${{ github.event.inputs.environment || 'qa' }} \
             -e CI=true \
             -e DOTENV_PRIVATE_KEY_QA=${{ secrets.DOTENV_PRIVATE_KEY_QA }} \
             -e DOTENV_PRIVATE_KEY_STAGE=${{ secrets.DOTENV_PRIVATE_KEY_STAGE }} \
             -e DOTENV_PRIVATE_KEY_PROD=${{ secrets.DOTENV_PRIVATE_KEY_PROD }} \
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
-            -v ${{ github.workspace }}/test-results:/app/test-results \
-            -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
-            -v ${{ github.workspace }}/playwright-html-report:/app/playwright-html-report \
-            -v ${{ github.workspace }}/allure-results:/app/allure-results \
+            -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            npx playwright test --grep '@regression'
+            bash -c "npx playwright test --grep '@regression' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 6️⃣ Run tests - All
       - name: 🧪 Run Tests - All
         if: ${{ github.event.inputs.test_suite == 'all' }}
         run: |
-          docker run --rm \
+          docker run --rm --name pw-test-run \
             -e ENV=${{ github.event.inputs.environment || 'qa' }} \
             -e CI=true \
             -e DOTENV_PRIVATE_KEY_QA=${{ secrets.DOTENV_PRIVATE_KEY_QA }} \
             -e DOTENV_PRIVATE_KEY_STAGE=${{ secrets.DOTENV_PRIVATE_KEY_STAGE }} \
             -e DOTENV_PRIVATE_KEY_PROD=${{ secrets.DOTENV_PRIVATE_KEY_PROD }} \
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
-            -v ${{ github.workspace }}/test-results:/app/test-results \
-            -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
-            -v ${{ github.workspace }}/playwright-html-report:/app/playwright-html-report \
-            -v ${{ github.workspace }}/allure-results:/app/allure-results \
+            -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            npx playwright test
+            bash -c "npx playwright test && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 7️⃣ Run tests - Specific file
       - name: 🧪 Run Tests - Specific File
         if: ${{ github.event.inputs.test_suite == 'specific' }}
         run: |
-          docker run --rm \
+          docker run --rm --name pw-test-run \
             -e ENV=${{ github.event.inputs.environment || 'qa' }} \
             -e CI=true \
             -e DOTENV_PRIVATE_KEY_QA=${{ secrets.DOTENV_PRIVATE_KEY_QA }} \
             -e DOTENV_PRIVATE_KEY_STAGE=${{ secrets.DOTENV_PRIVATE_KEY_STAGE }} \
             -e DOTENV_PRIVATE_KEY_PROD=${{ secrets.DOTENV_PRIVATE_KEY_PROD }} \
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
-            -v ${{ github.workspace }}/test-results:/app/test-results \
-            -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
-            -v ${{ github.workspace }}/playwright-html-report:/app/playwright-html-report \
-            -v ${{ github.workspace }}/allure-results:/app/allure-results \
+            -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            npx playwright test ${{ github.event.inputs.test_file }}
+            bash -c "npx playwright test ${{ github.event.inputs.test_file }} && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
-      # 8️⃣ Verify generated reports
+      # 8️⃣ Move reports from output folder
+      - name: 📦 Extract Reports
+        if: always()
+        run: |
+          mkdir -p test-results playwright-report playwright-html-report allure-results
+          [ -d "output/test-results" ] && cp -r output/test-results/* test-results/ || echo "No test-results"
+          [ -d "output/playwright-report" ] && cp -r output/playwright-report/* playwright-report/ || echo "No playwright-report"
+          [ -d "output/playwright-html-report" ] && cp -r output/playwright-html-report/* playwright-html-report/ || echo "No playwright-html-report"
+          [ -d "output/allure-results" ] && cp -r output/allure-results/* allure-results/ || echo "No allure-results"
+
+      # 9️⃣ Verify generated reports
       - name: 📊 Verify Generated Reports
         if: always()
         run: |
           echo "Allure results:"
-          ls -R allure-results || echo "Allure results not found"
+          ls -R allure-results 2>/dev/null || echo "Allure results not found"
           echo "Playwright report:"
-          ls -R playwright-report || echo "Playwright report not found"
+          ls -R playwright-report 2>/dev/null || echo "Playwright report not found"
           echo "Playwright HTML report:"
-          ls -R playwright-html-report || echo "Playwright HTML report not found"
+          ls -R playwright-html-report 2>/dev/null || echo "Playwright HTML report not found"
 
-      # 9️⃣ Generate Allure Report
+      # 🔟 Generate Allure Report
       - name: 📊 Generate Allure Report
         if: always()
         run: |
@@ -183,7 +181,7 @@ jobs:
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
             npx allure generate allure-results --clean -o allure-report
 
-      # 🔟 Upload artifacts
+      # 1️⃣1️⃣ Upload artifacts
       - name: 📊 Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
