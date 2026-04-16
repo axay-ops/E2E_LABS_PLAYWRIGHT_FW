@@ -78,7 +78,7 @@ jobs:
 
       # 2️⃣ Login to Docker Hub (optional, needed for private images)
       - name: 🔐 Login to Docker Hub
-        if: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
+        #if: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -428,7 +428,7 @@ jobs:
       # ========== Email Notification ==========
       - name: 📧 Send Email Notification
         id: email
-        if: ${{ secrets.NOTIFICATION_EMAILS != '' }}
+        #if: ${{ secrets.NOTIFICATION_EMAILS != '' }}
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
