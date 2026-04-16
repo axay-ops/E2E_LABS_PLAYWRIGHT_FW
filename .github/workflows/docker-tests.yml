@@ -92,7 +92,7 @@ jobs:
 
       # 4️⃣ Run tests - Smoke
       - name: 🧪 Run Tests - Smoke
-        if: ${{ github.event.inputs.test_suite == 'smoke' || github.event_name == 'schedule' }}
+        if: ${{ github.event.inputs.test_suite == 'smoke' || github.event_name == 'schedule' || github.event_name == 'push' }}
         run: |
           docker run --rm --name pw-test-run \
             -e ENV=${{ github.event.inputs.environment || 'qa' }} \
@@ -103,7 +103,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test --grep '@smoke' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ./tests/loginpage.spec.ts --grep '@smoke' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 5️⃣ Run tests - Regression
       - name: 🧪 Run Tests - Regression
@@ -118,7 +118,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test --grep '@regression' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ./tests/loginpage.spec.ts --grep '@regression' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 6️⃣ Run tests - All
       - name: 🧪 Run Tests - All
@@ -133,7 +133,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ./tests/loginpage.spec.ts && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 7️⃣ Run tests - Specific file
       - name: 🧪 Run Tests - Specific File
