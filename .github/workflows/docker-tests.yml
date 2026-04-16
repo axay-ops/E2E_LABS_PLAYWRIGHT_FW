@@ -103,7 +103,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test ./tests/loginpage.spec.ts --grep '@smoke' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ./tests/loginpage.spec.ts --grep '@smoke' --project='chromium' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 5️⃣ Run tests - Regression
       - name: 🧪 Run Tests - Regression
@@ -118,7 +118,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test ./tests/loginpage.spec.ts --grep '@regression' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ./tests/loginpage.spec.ts --grep '@regression' --project='chromium' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 6️⃣ Run tests - All
       - name: 🧪 Run Tests - All
@@ -133,7 +133,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test ./tests/loginpage.spec.ts && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ./tests/loginpage.spec.ts --project='chromium' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 7️⃣ Run tests - Specific file
       - name: 🧪 Run Tests - Specific File
@@ -148,7 +148,7 @@ jobs:
             -e DOTENV_PRIVATE_KEY_DEV=${{ secrets.DOTENV_PRIVATE_KEY_DEV }} \
             -v ${{ github.workspace }}/output:/app/output \
             ${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.docker_image_tag || 'latest' }} \
-            bash -c "npx playwright test ${{ github.event.inputs.test_file }} && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
+            bash -c "npx playwright test ${{ github.event.inputs.test_file }} --project='chromium' && mkdir -p /app/output && cp -r test-results playwright-report playwright-html-report allure-results /app/output/ 2>/dev/null || true"
 
       # 8️⃣ Move reports from output folder
       - name: 📦 Extract Reports
