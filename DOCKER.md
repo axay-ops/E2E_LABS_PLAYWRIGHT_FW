@@ -77,32 +77,81 @@ docker-compose down
 
 ## Publishing to Docker Hub
 
-### 1. Login to Docker Hub
+### Automated Publishing (Recommended)
+
+The project includes a GitHub Actions workflow ([`.github/workflows/docker-build-push.yml`](.github/workflows/docker-build-push.yml)) that **automatically builds and pushes** your Docker image whenever you push code changes.
+
+📖 **See [CI_CD_PIPELINE.md](CI_CD_PIPELINE.md) for complete automation workflow guide with diagrams, timing, and troubleshooting.**
+
+#### Setup (One-time):
+
+1. **Add Docker Hub credentials to GitHub Secrets:**
+   - Go to your repository → **Settings** → **Secrets and variables** → **Actions**
+   - Add these secrets:
+     - `DOCKER_HUB_USERNAME` = your Docker Hub username
+     - `DOCKER_HUB_TOKEN` = your Docker Hub access token (get from [Docker Hub](https://hub.docker.com) → Account Settings → Security → New Access Token)
+
+2. **Update Docker image name in workflow:**
+   - Edit [`.github/workflows/docker-build-push.yml`](.github/workflows/docker-build-push.yml) line 31:
+   ```yaml
+   DOCKER_IMAGE: yourusername/e2e-playwright-tests  # ← Change this
+   ```
+
+#### How it works:
+
+**Automatic Triggers:**
+- ✅ Pushes to `main` branch (when Dockerfile, tests, or dependencies change)
+- ✅ Manual workflow dispatch with optional custom tag
+
+**Tags created automatically:**
+- `latest` - Always points to the most recent build
+- `<commit-sha>` - Specific commit for rollback (e.g., `abc123def`)
+- `<custom-tag>` - Optional tag when manually triggered
+
+**After pushing code:**
+```bash
+git add .
+git commit -m "Update tests"
+git push origin main
+
+# GitHub Actions automatically:
+# 1. Builds Docker image
+# 2. Pushes to Docker Hub with tags: latest, commit-sha
+# 3. Optionally triggers test workflow
+```
+
+### Manual Publishing (Alternative)
+
+If you prefer to build and push manually:
+
+#### 1. Login to Docker Hub
 
 ```bash
 docker login
 # Enter your Docker Hub username and password
 ```
 
-### 2. Tag your image
+#### 2. Build and tag your image
 
 ```bash
-# Replace 'yourusername' with your Docker Hub username
-docker tag e2e-playwright-tests yourusername/e2e-playwright-tests:latest
-docker tag e2e-playwright-tests yourusername/e2e-playwright-tests:1.0.0
+# Build with latest tag
+docker build -t yourusername/e2e-playwright-tests:latest .
+
+# Optionally tag with version
+docker tag yourusername/e2e-playwright-tests:latest yourusername/e2e-playwright-tests:v1.0.0
 ```
 
-### 3. Push to Docker Hub
+#### 3. Push to Docker Hub
 
 ```bash
 # Push latest
 docker push yourusername/e2e-playwright-tests:latest
 
 # Push specific version
-docker push yourusername/e2e-playwright-tests:1.0.0
+docker push yourusername/e2e-playwright-tests:v1.0.0
 ```
 
-### 4. Pull and run from Docker Hub (on any machine)
+#### 4. Pull and run from Docker Hub (on any machine)
 
 ```bash
 # Pull the image
