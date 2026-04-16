@@ -1,6 +1,11 @@
 # Use official Playwright image with Node.js
 FROM mcr.microsoft.com/playwright:v1.58.0-noble
 
+# Install Java (required for Allure report generation)
+RUN apt-get update && \
+    apt-get install -y default-jre && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /app
 
