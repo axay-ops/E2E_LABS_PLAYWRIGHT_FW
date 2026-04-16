@@ -48,12 +48,12 @@ on:
         default: 'latest'
         type: string
 
-  push:
-    branches:
-      - main
-    paths:
-      - 'tests/**'
-      - '.github/workflows/docker-tests.yml'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'tests/**'
+  #     - '.github/workflows/docker-tests.yml'
 
   schedule:
     - cron: '0 3 * * *'  # Daily at 3 AM UTC
