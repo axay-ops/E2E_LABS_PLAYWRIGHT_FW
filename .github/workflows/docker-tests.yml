@@ -48,6 +48,11 @@ on:
         default: 'latest'
         type: string
 
+  # ⚠️ COMMENTED OUT: Conflicts with docker-build-push.yml
+  # When code is pushed, docker-build-push.yml builds the image THEN triggers this workflow
+  # If this push trigger is enabled, tests run TWICE (once with old image, once with new)
+  # Uncomment ONLY if you want to run tests on push WITHOUT building a new Docker image first
+
   # push:
   #   branches:
   #     - main

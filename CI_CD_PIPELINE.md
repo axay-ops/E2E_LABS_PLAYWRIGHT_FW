@@ -105,6 +105,7 @@ on:
 
 **Automatic Trigger:**
 - ✅ Triggered by `docker-build-push.yml` after successful build
+- ✅ Ensures tests always use the newly built Docker image
 
 **Manual Trigger:**
 - Go to Actions → Docker Tests → Run workflow
@@ -115,6 +116,14 @@ on:
 schedule:
   - cron: '0 3 * * *'  # Daily at 3 AM UTC
 ```
+
+**⚠️ Important: Push Trigger Commented Out**
+
+The `push` trigger is **commented out** in `docker-tests.yml` to avoid conflicts:
+- ❌ **Don't enable** if using the automated build pipeline
+- ✅ Tests are automatically triggered by `docker-build-push.yml` after building
+- If enabled, tests would run **twice**: once with old image, once with new image
+- Only uncomment if you want to run tests WITHOUT rebuilding the Docker image first
 
 ---
 
@@ -396,6 +405,16 @@ docker pull axayhub/e2e-labs-playwright-fw-hubrepo:latest
 - Check volume mounts are working
 - Verify tests actually ran (check logs)
 - Ensure GitHub Pages is enabled
+
+**"Tests running twice on push"**
+- The `push` trigger in `docker-tests.yml` should be commented out
+- Only `docker-build-push.yml` should have push trigger
+- Tests are automatically triggered by build workflow
+
+**"Tests using old Docker image"**
+- Make sure push trigger is commented out in `docker-tests.yml`
+- Tests should only run AFTER `docker-build-push.yml` completes
+- Check that image tag in test run matches the newly built SHA
 
 ---
 
