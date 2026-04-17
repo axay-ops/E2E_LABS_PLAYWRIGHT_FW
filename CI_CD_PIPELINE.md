@@ -94,7 +94,11 @@ on:
       - package*.json
       - playwright.config.ts
       - tests/**
-      - lib/**, pages/**
+      - lib/**, pages/**, 
+      - 'data/**'
+      - 'fixtures/**'
+      - 'schemas/**'
+      - 'utils/**'
 ```
 
 **Manual Trigger:**

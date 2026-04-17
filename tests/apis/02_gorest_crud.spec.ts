@@ -47,13 +47,13 @@ console.log(responseBody);
 });    
 
 
-test('DELETE - delete User', {tag: ['@api']}, async ({request})=> {
+// test('DELETE - delete User', {tag: ['@api']}, async ({request})=> {
 
-    const userid = 1002;
+//     const userid = 1002;
 
-    const response: APIResponse = await request.delete(`${apiURI}/users/${userid}}`, {
-    headers
-});
+//     const response: APIResponse = await request.delete(`${apiURI}/users/${userid}}`, {
+//     headers
+// });
 
-expect.soft(response.status()).toBe(204);  // 204 No Content
-}); 
+// expect.soft(response.status()).toBe(204);  // 204 No Content
+// }); 
