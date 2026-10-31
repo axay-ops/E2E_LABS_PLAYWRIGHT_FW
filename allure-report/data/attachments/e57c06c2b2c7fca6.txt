@@ -1,0 +1,3 @@
+Active Cookies: [ 'hcdn', 'OCSESSID', 'language', 'currency' ]
+Page Title :My Account
+Video saved in standard location: /app/test-results/loginpage-Verify-Successfu-b5caa--Admin-User-via-auth-setup--chromium/videos/2a7e67f7630da2ab79e2773cc3ca1e7e.webm
