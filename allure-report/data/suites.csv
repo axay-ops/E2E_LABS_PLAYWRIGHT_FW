@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","1095","Verify Successful login for Admin User (via auth setup)","chromium","2026-11-28","passed","2026-11-28","","loginpage.spec.ts","",""
+"","2142","Authenticate as Customer User","setup","2026-11-28","passed","2026-11-28","","auth.setup.ts","",""
+"","2912","Verify Successful login for Admin User","chromium","2026-11-28","passed","2026-11-28","","loginpage.spec.ts","",""
+"","2427","Authenticate as Admin User","setup","2026-11-28","passed","2026-11-28","","auth.setup.ts","",""
